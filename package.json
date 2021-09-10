@@ -1,0 +1,25 @@
+{
+    "name": "k-lang",
+    "displayName": "K Lang",
+    "description": "Syntax highlighting for K lang",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.60.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "klang",
+            "aliases": ["K", "klang"],
+            "extensions": [".k .kql"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "klang",
+            "scopeName": "source.k",
+            "path": "./syntaxes/klang.tmLanguage.json"
+        }]
+    }
+}
