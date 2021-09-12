@@ -1251,12 +1251,20 @@ repository:
     - include: '#statement'
 
   for-in-statement:
-    begin: (?<!\.)\b(for)\b\s*\b([[:alnum:]]+)\b\s*\b(in)\b\s*([^{]+)\s*(?=\{)
+    begin: (?<!\.)\b(for)\b\s*\b([[:alnum:]]+)\b\s+\b
     beginCaptures:
       '1': { name: keyword.control.loop.for.k }
-      '3': { name: keyword.control.loop.in.k }
+      '2': { name: variable.other.readwrite.k }
     end: (?<=\})|(?=;)
     patterns:
+    - begin: (?:\b(in)\b)
+      beginCaptures:
+        '1': {name: keyword.control.loop.in.k}
+      end: (\{)
+      endCaptures:
+        '1': {name: punctuation.curlybrace.open.k}
+      patterns:
+        - include: '#expression'
     - include: '#statement'
 
   for-statement:
@@ -1819,6 +1827,7 @@ repository:
     - include: '#null-literal'
     - include: '#numeric-literal'
     - include: '#char-literal'
+    - include: '#string-3-dquote-literal'
     - include: '#string-literal'
     - include: '#verbatim-string-literal'
     - include: '#tuple-literal'
@@ -1943,16 +1952,27 @@ repository:
   char-character-escape:
     name: constant.character.escape.k
     match: \\(['"\\0abfnrtv]|x[0-9a-fA-F]{1,4}|u[0-9a-fA-F]{4})
+    
+  string-3-dquote-literal:
+    name: string.quoted.three-double.k
+    begin: '(?<!@)"""'
+    beginCaptures:
+      '0': { name: punctuation.definition.string.begin.k }
+    end: (""")
+    endCaptures:
+      '1': { name: punctuation.definition.string.end.k }
+    patterns:
+    - include: '#string-character-escape'
 
   string-literal:
     name: string.quoted.double.k
     begin: '(?<!@)"'
     beginCaptures:
       '0': { name: punctuation.definition.string.begin.k }
-    end: (")|((?:[^\\\n])$)
+    end: (")
     endCaptures:
       '1': { name: punctuation.definition.string.end.k }
-      '2': { name: invalid.illegal.newline.k }
+      #'2': { name: invalid.illegal.newline.k }
     patterns:
     - include: '#string-character-escape'
 
