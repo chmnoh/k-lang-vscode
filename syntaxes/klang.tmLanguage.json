@@ -200,6 +200,9 @@
           "include": "#for-in-statement"
         },
         {
+          "include": "#for-to-statement"
+        },
+        {
           "include": "#for-statement"
         },
         {
@@ -2049,7 +2052,7 @@
       ]
     },
     "for-in-statement": {
-      "begin": "(?<!\\.)\\b(for)\\b\\s*\\b([[:alnum:]]+)\\b\\s+\\b",
+      "begin": "(?<!\\.)\\b(for)\\b\\s*\\b([_[:alpha:]][_[:alnum:]]*)\\b\\s+\\b",
       "beginCaptures": {
         "1": {
           "name": "keyword.control.loop.for.k"
@@ -2065,6 +2068,42 @@
           "beginCaptures": {
             "1": {
               "name": "keyword.control.loop.in.k"
+            }
+          },
+          "end": "(\\{)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.curlybrace.open.k"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
+        },
+        {
+          "include": "#statement"
+        }
+      ]
+    },
+    "for-to-statement": {
+      "begin": "(?<!\\.)\\b(for)\\b\\s*\\b([_[:alpha:]][_[:alnum:]]*)\\s*=\\s*([[:digit:]]+)\\b\\s+\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.loop.for.k"
+        },
+        "2": {
+          "name": "variable.other.readwrite.k"
+        }
+      },
+      "end": "(?<=\\})|(?=;)",
+      "patterns": [
+        {
+          "begin": "(?:\\b(to)\\b)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.loop.to.k"
             }
           },
           "end": "(\\{)",
