@@ -1,4 +1,4 @@
-ext_dir=$(echo $USERPROFILE|sed 's;\\;/;g')"/.vscode/extensions"
-cp ../package.json $ext_dir/k-lang/.
-cp ../language-configuration.json $ext_dir/k-lang/.
-cp klang.tmLanguage.json $ext_dir/k-lang/syntaxes/.
+ext_dir=$(echo $USERPROFILE|sed 's;\\;/;g')"/.vscode/extensions/chmn.klang-0.0.1"
+cp ../package.json $ext_dir/.
+cp ../language-configuration.json $ext_dir/.
+cp klang.tmLanguage.json $ext_dir/syntaxes/.
