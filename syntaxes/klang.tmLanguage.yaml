@@ -17,6 +17,7 @@ repository:
     patterns:
     - include: '#extern-alias-directive'
     - include: '#using-directive'
+    - include: '#import-directive'
     - include: '#attribute-section'
     - include: '#punctuation-semicolon'
 
@@ -175,6 +176,23 @@ repository:
       - name: entity.name.type.namespace.k
         match: '@?[_[:alpha:]][_[:alnum:]]*'
       - include: '#operator-assignment'
+
+  import-directive:
+    patterns:
+    - begin: ^(import)\s+(?=(?<identifier>([_[:alpha:]][_[:alnum:]]*))\s*)
+      beginCaptures:
+        '1': { name: keyword.other.using.k }
+        '2': { name: keyword.other.namespace.k }
+      end: (?=\n)
+      patterns:
+      - include: '#comment'
+      - include: '#punctuation-comma'
+      - match: |-
+          (?x)
+          ([_[:alpha:]][_[:alnum:]]*)\b\s*
+          (?=,)
+        captures:
+          '1': {name: keyword.other.namespace.k }
 
   attribute-section:
     begin: (\[)(assembly|module|field|event|method|param|property|return|type)?(\:)?

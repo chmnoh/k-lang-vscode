@@ -32,6 +32,9 @@
           "include": "#using-directive"
         },
         {
+          "include": "#import-directive"
+        },
+        {
           "include": "#attribute-section"
         },
         {
@@ -439,6 +442,41 @@
             },
             {
               "include": "#operator-assignment"
+            }
+          ]
+        }
+      ]
+    },
+    "import-directive": {
+      "patterns": [
+        {
+          "begin": "^(import)\\s+(?=(?<identifier>([_[:alpha:]][_[:alnum:]]*))\\s*)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.other.using.k"
+            },
+            "2": {
+              "name": "keyword.other.namespace.k"
+            }
+          },
+          "end": "(?=\\n)",
+          "patterns": [
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#type"
+            },
+            {
+              "include": "#punctuation-comma"
+            },
+            {
+              "match": "(?x)\n([_[:alpha:]][_[:alnum:]]*)\\b\\s*\n(?=,)",
+              "captures": {
+                "1": {
+                  "name": "keyword.other.namespace.k"
+                }
+              }
             }
           ]
         }
