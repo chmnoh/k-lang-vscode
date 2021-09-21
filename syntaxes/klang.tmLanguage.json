@@ -1035,6 +1035,18 @@
         }
       ]
     },
+    "rest-parameters-decl": {
+      "begin": "\\b(as\\s+rest)\\b\\s+(\"[^\"]+\")",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.rest-decl.k"
+        },
+        "2": {
+          "name": "string.quoted.double.k"
+        }
+      },
+      "end": "(?=\\{)"
+    },
     "generic-constraints": {
       "begin": "(where)\\s+(@?[_[:alpha:]][_[:alnum:]]*)\\s*(:)",
       "beginCaptures": {
@@ -1375,6 +1387,9 @@
         },
         {
           "include": "#parenthesized-parameter-list"
+        },
+        {
+          "include": "#rest-parameters-decl"
         },
         {
           "include": "#generic-constraints"
@@ -4015,7 +4030,7 @@
       ]
     },
     "parameter": {
-      "match": "(?x)\n(?:(?:\\b(ref|params|out|in|this)\\b)\\s+)?\n(?<type_name>\n  (?:\n    (?:ref\\s+)?   # ref return\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*(\\?|&)\\s*)? # nullable suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s+\n(\\g<identifier>)",
+      "match": "(?x)\n(?:(?:\\b(ref|params|out|in|this)\\b)\\s+)?\n(?<type_name>\n  (?:\n    (?:ref\\s+)?   # ref return\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*(\\?|&|\\*)\\s*)? # nullable|reference|pointer suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s+\n(\\g<identifier>)",
       "captures": {
         "1": {
           "name": "storage.modifier.k"
@@ -4531,6 +4546,9 @@
         },
         {
           "include": "#type-reference-suffix"
+        },
+        {
+          "include": "#type-pointer-suffix"
         }
       ]
     },
@@ -4685,6 +4703,14 @@
       "captures": {
         "0": {
           "name": "punctuation.separator.reference-mark.k"
+        }
+      }
+    },
+    "type-pointer-suffix": {
+      "match": "\\*",
+      "captures": {
+        "0": {
+          "name": "punctuation.separator.pointer-mark.k"
         }
       }
     },

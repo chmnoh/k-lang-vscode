@@ -489,6 +489,13 @@ repository:
     - include: '#punctuation-comma'
     - include: '#preprocessor'
 
+  rest-parameters-decl:
+    begin: \b(as\s+rest)\b\s+("[^"]+")
+    beginCaptures:
+      '1': { name: keyword.other.rest-decl.k }
+      '2': { name: string.quoted.double.k }
+    end: (?=\{)
+
   generic-constraints:
     begin: (where)\s+(@?[_[:alpha:]][_[:alnum:]]*)\s*(:)
     beginCaptures:
@@ -814,6 +821,7 @@ repository:
     patterns:
     - include: '#comment'
     - include: '#parenthesized-parameter-list'
+    - include: '#rest-parameters-decl'
     - include: '#generic-constraints'
     - include: '#expression-body'
     - include: '#block'
@@ -2663,7 +2671,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*(\?|&)\s*)? # nullable suffix?
+          (?:\s*(\?|&|\*)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -3033,6 +3041,7 @@ repository:
     - include: '#type-array-suffix'
     - include: '#type-nullable-suffix'
     - include: '#type-reference-suffix'
+    - include: '#type-pointer-suffix'
 
   ref-modifier:
     name: storage.modifier.k
@@ -3142,6 +3151,11 @@ repository:
     match: '&'
     captures:
       '0': { name: punctuation.separator.reference-mark.k }
+
+  type-pointer-suffix:
+    match: '\*'
+    captures:
+      '0': { name: punctuation.separator.pointer-mark.k }
 
   operator-assignment:
     name: keyword.operator.assignment.k
