@@ -367,6 +367,9 @@
         },
         {
           "include": "#identifier"
+        },
+        {
+          "include": "#qualified-identifier"
         }
       ]
     },
@@ -471,7 +474,7 @@
               "include": "#punctuation-comma"
             },
             {
-              "match": "(?x)\n([_[:alpha:]][_[:alnum:]]*)\\b\\s*\n(?=,)",
+              "match": "(?x)\n([_[:alpha:]][_[:alnum:]]*)\\b\\s*\n(?=,|\\n)",
               "captures": {
                 "1": {
                   "name": "keyword.other.namespace.k"
@@ -3724,8 +3727,15 @@
       ]
     },
     "identifier": {
-      "name": "variable.other.readwrite.k",
-      "match": "@?[_[:alpha:]][_[:alnum:]]*"
+      "match": "(?:([_[:alpha:]][_[:alnum:]]*)\\:\\:)?([_[:alpha:]][_[:alnum:]]*)",
+      "captures": {
+        "1": {
+          "name": "entity.name.type.alias.k"
+        },
+        "2": {
+          "name": "variable.other.readwrite.k"
+        }
+      }
     },
     "cast-expression": {
       "match": "(?x)\n(\\()\\s*\n(?<type_name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s*\n(\\))(?=\\s*-*!*@?[_[:alnum:]\\(])",
@@ -4601,7 +4611,7 @@
       }
     },
     "type-builtin": {
-      "match": "\\b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket|lambda)\\b",
+      "match": "\\b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\\b",
       "captures": {
         "1": {
           "name": "keyword.type.k"

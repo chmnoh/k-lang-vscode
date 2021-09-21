@@ -141,6 +141,7 @@ repository:
     - include: '#tuple-deconstruction-assignment'
     - include: '#initializer-expression'
     - include: '#identifier'
+    - include: '#qualified-identifier'
 
   extern-alias-directive:
     begin: \s*(extern)\b\s*(alias)\b\s*(@?[_[:alpha:]][_[:alnum:]]*)
@@ -191,7 +192,7 @@ repository:
       - match: |-
           (?x)
           ([_[:alpha:]][_[:alnum:]]*)\b\s*
-          (?=,)
+          (?=,|\n)
         captures:
           '1': {name: keyword.other.namespace.k }
 
@@ -2316,8 +2317,10 @@ repository:
     - include: '#punctuation-comma'
 
   identifier:
-    name: variable.other.readwrite.k
-    match: '@?[_[:alpha:]][_[:alnum:]]*'
+    match: (?:([_[:alpha:]][_[:alnum:]]*)\:\:)?([_[:alpha:]][_[:alnum:]]*)
+    captures:
+      '1': { name: entity.name.type.alias.k }
+      '2': { name: variable.other.readwrite.k }
 
   cast-expression:
     match: |-
