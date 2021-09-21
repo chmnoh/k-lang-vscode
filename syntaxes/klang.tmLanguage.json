@@ -194,6 +194,9 @@
           "include": "#comment"
         },
         {
+          "include": "#kql-statement"
+        },
+        {
           "include": "#while-statement"
         },
         {
@@ -463,9 +466,6 @@
           "patterns": [
             {
               "include": "#comment"
-            },
-            {
-              "include": "#type"
             },
             {
               "include": "#punctuation-comma"
@@ -2055,6 +2055,341 @@
           "include": "#statement"
         }
       ]
+    },
+    "kql-statement": {
+      "patterns": [
+        {
+          "include": "#kql-select-statement"
+        },
+        {
+          "include": "#kql-use-volume-statement"
+        },
+        {
+          "include": "#kql-create-statement"
+        },
+        {
+          "include": "#kql-show-statement"
+        },
+        {
+          "include": "#kql-attach-statement"
+        },
+        {
+          "include": "#kql-detach-statement"
+        },
+        {
+          "include": "#kql-delete-statement"
+        },
+        {
+          "include": "#kql-explain-statement"
+        },
+        {
+          "include": "#kql-insert-statement"
+        },
+        {
+          "include": "#kql-update-statement"
+        },
+        {
+          "include": "#kql-import-statement"
+        },
+        {
+          "include": "#kql-export-statement"
+        },
+        {
+          "include": "#kql-copy-volume-statement"
+        }
+      ]
+    },
+    "kql-select-statement": {
+      "begin": "(?<!\\.)\\b(?i:(select))\\b\\s*(.+)\\s*\\b(?i:(from))\\b\\s+\\b([_[:alpha:]][_[:alnum:]]*)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.select.k"
+        },
+        "2": {
+          "name": "entity.name.variable.k"
+        },
+        "3": {
+          "name": "keyword.query.from.k"
+        },
+        "4": {
+          "name": "entity.name.variable.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#where-clause"
+        },
+        {
+          "include": "#orderby-clause"
+        },
+        {
+          "include": "#group-clause"
+        }
+      ]
+    },
+    "kql-copy-volume-statement": {
+      "begin": "(?<!\\.)\\b(?i:(copy\\svolume))\\b\\s*(.+)\\s*\\b(?i:(to))\\b\\s+\\b([_[:alpha:]][_[:alnum:]]*)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.copy-volume.k"
+        },
+        "3": {
+          "name": "keyword.query.to.k"
+        },
+        "4": {
+          "name": "entity.name.variable.k"
+        }
+      },
+      "end": "(?=;)"
+    },
+    "kql-import-statement": {
+      "begin": "(?<!\\.)\\b(?i:(import\\sfile|import\\sfiles))\\b\\s*(.+)\\s*\\b(?i:(to))\\b\\s+\\b([_[:alpha:]][_[:alnum:]]*)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.import.k"
+        },
+        "3": {
+          "name": "keyword.query.to.k"
+        }
+      },
+      "end": "(?=;)"
+    },
+    "kql-export-statement": {
+      "begin": "(?<!\\.)\\b(?i:(export\\srecords\\sfrom))\\b\\s+\\b([_[:alpha:]][_[:alnum:]]*)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.export.k"
+        },
+        "2": {
+          "name": "entity.name.variable.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#where-clause"
+        },
+        {
+          "include": "#kql-to-entity"
+        }
+      ]
+    },
+    "kql-insert-statement": {
+      "begin": "(?<!\\.)\\b(?i:(insert))\\b\\s*\\b(?i:(into))\\b\\s+\\b([_[:alpha:]][_[:alnum:]]*)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.insert.k"
+        },
+        "2": {
+          "name": "keyword.query.into.k"
+        },
+        "3": {
+          "name": "entity.name.variable.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#kql-set-clause"
+        }
+      ]
+    },
+    "kql-set-clause": {
+      "begin": "(?x)\n\\b(set)\\b\\s*\n(@?[_[:alpha:]][_[:alnum:]]*)\\b\\s*\n(=)\\s*",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.set.k"
+        },
+        "2": {
+          "name": "entity.name.variable.range-variable.k"
+        },
+        "3": {
+          "name": "keyword.operator.assignment.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#query-body"
+        },
+        {
+          "include": "#expression"
+        }
+      ]
+    },
+    "kql-update-statement": {
+      "begin": "(?<!\\.)\\b(?i:(update))\\b\\s*\\b([_[:alpha:]][_[:alnum:]]*)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.update.k"
+        },
+        "2": {
+          "name": "entity.name.variable.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#kql-set-clause"
+        },
+        {
+          "include": "#where-clause"
+        }
+      ]
+    },
+    "kql-delete-statement": {
+      "begin": "(?<!\\.)\\b(?i:(delete|undelete))\\b\\s*(.*)\\s*\\b(?i:(from))\\b\\s+\\b([_[:alpha:]][_[:alnum:]]*)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.delete.k"
+        },
+        "3": {
+          "name": "keyword.query.from.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#where-clause"
+        }
+      ]
+    },
+    "kql-use-volume-statement": {
+      "begin": "(?<!\\.)\\b(?i:(use))\\b\\s*(?i:(volume))\\s*\\b([_[:alpha:]][_[:alnum:]]*)\\b\\s*",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.use.k"
+        },
+        "2": {
+          "name": "keyword.query.volume.k"
+        },
+        "3": {
+          "name": "entity.name.variable.k"
+        }
+      },
+      "end": "(?=;)"
+    },
+    "kql-create-statement": {
+      "begin": "(?<!\\.)\\b(?i:(create|drop|rename|alter|truncate))\\b\\s*(?i:(volume|table|snapshot|index|gateway))\\s*\\b([_[:alpha:]][_[:alnum:]]*)\\b\\s*",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.create_drop.k"
+        },
+        "2": {
+          "name": "keyword.query.entity.k"
+        },
+        "3": {
+          "name": "entity.name.variable.k"
+        }
+      },
+      "end": "(?=;)"
+    },
+    "kql-show-statement": {
+      "begin": "(?<!\\.)\\b(?i:(show))\\b\\s*(?i:(volumes|tables|schedules|conf|privileges))",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.show.k"
+        },
+        "2": {
+          "name": "keyword.query.entity.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#kql-options-more"
+        }
+      ]
+    },
+    "kql-explain-statement": {
+      "begin": "(?<!\\.)\\b(?i:(explain))\\b\\s*([_[:alpha:]][_[:alnum:]]*)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.explain.k"
+        },
+        "2": {
+          "name": "entity.name.variable.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#kql-options-more"
+        }
+      ]
+    },
+    "kql-options-more": {
+      "match": "\\b(?i:(more))\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.query.more.k"
+        }
+      }
+    },
+    "kql-attach-statement": {
+      "begin": "(?<!\\.)\\b(?i:(attach|reload))\\b\\s+",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.attach.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#kql-attach-type"
+        },
+        {
+          "include": "#kql-to-entity"
+        }
+      ]
+    },
+    "kql-detach-statement": {
+      "begin": "(?<!\\.)\\b(?i:(detach))\\b\\s+",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.detach.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#kql-attach-type"
+        },
+        {
+          "include": "#kql-from-entity"
+        }
+      ]
+    },
+    "kql-attach-type": {
+      "match": "\\b(?i:(schedule|field\\s+key\\s+cache|key\\s+order\\s+cache|truncation\\s+cache))\\b\\s*",
+      "captures": {
+        "1": {
+          "name": "keyword.query.entity.k"
+        }
+      }
+    },
+    "kql-to-entity": {
+      "match": "\\b(?i:(to))\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
+      "captures": {
+        "1": {
+          "name": "keyword.query.to.k"
+        },
+        "2": {
+          "name": "entity.name.variable.k"
+        }
+      }
+    },
+    "kql-from-entity": {
+      "match": "\\b(?i:(from))\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
+      "captures": {
+        "1": {
+          "name": "keyword.query.from.k"
+        },
+        "2": {
+          "name": "entity.name.variable.k"
+        }
+      }
     },
     "while-statement": {
       "begin": "(?<!\\.)\\b(while)\\b\\s*(?=\\()",
@@ -3931,7 +4266,7 @@
       }
     },
     "orderby-clause": {
-      "begin": "\\b(orderby)\\b\\s*",
+      "begin": "\\b((orderby)|(order\\s+by))\\b\\s*",
       "beginCaptures": {
         "1": {
           "name": "keyword.query.orderby.k"
@@ -3954,12 +4289,18 @@
       ]
     },
     "ordering-direction": {
-      "match": "\\b(?:(ascending)|(descending))\\b",
+      "match": "\\b(?:(ascending)|(descending)|(asc)|(desc))\\b",
       "captures": {
         "1": {
           "name": "keyword.query.ascending.k"
         },
         "2": {
+          "name": "keyword.query.descending.k"
+        },
+        "3": {
+          "name": "keyword.query.ascending.k"
+        },
+        "4": {
           "name": "keyword.query.descending.k"
         }
       }
