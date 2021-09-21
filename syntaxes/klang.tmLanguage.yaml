@@ -774,7 +774,7 @@ repository:
       (?<return_type>
         (?<type_name>
           (?:
-            (?:ref\s+(?:readonly\s+)?)?   # ref return
+            (?:(?:ref|export)\s+(?:readonly\s+)?)?   # ref return
             (?:
               (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\s*\:\:\s*)? # alias-qualification
               (?<name_and_type_args> # identifier + type arguments (if any)
@@ -796,6 +796,7 @@ repository:
           )
         )\s+
       )
+      (?:([_[:alpha:]][_[:alnum:]]*)\:\:)?                 # namespace?
       (?<interface_name>\g<type_name>\s*\.\s*)?
       (\g<identifier>)\s*
       (<([^<>]+)>)?\s*
@@ -809,12 +810,13 @@ repository:
       # '4': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
       # '5': ?<type_args> is a sub-expression. Its final value is not considered.
       # '6': ?<tuple> is a sub-expression. Its final value is not considered.
-      '7':
+      '7': { name: entity.name.type.alias.k }
+      '8':
         patterns:
         - include: '#type'
         - include: '#punctuation-accessor'
-      '8': { name: entity.name.function.k }
-      '9':
+      '9': { name: entity.name.function.method.decl.k }
+      '10':
         patterns:
         - include: '#type-parameter-list'
     end: (?<=\})|(?=;)
@@ -832,7 +834,7 @@ repository:
     patterns:
     - match: (@?[_[:alpha:]][_[:alnum:]]*)\b
       captures:
-        '1': { name: entity.name.function.k }
+        '1': { name: entity.name.function.ctor-decl.k }
     - begin: (:)
       beginCaptures:
         '1': { name: punctuation.separator.colon.k }
@@ -858,7 +860,7 @@ repository:
     begin: (~)(@?[_[:alpha:]][_[:alnum:]]*)\s*(?=\()
     beginCaptures:
       '1': { name: punctuation.tilde.k }
-      '2': { name: entity.name.function.k }
+      '2': { name: entity.name.function.dtor-decl.k }
     end: (?<=\})|(?=;)
     patterns:
     - include: '#comment'
@@ -904,7 +906,7 @@ repository:
       # '4': ?<type_args> is a sub-expression. Its final value is not considered.
       # '5': ?<tuple> is a sub-expression. Its final value is not considered.
       '6': { name: keyword.other.operator-decl.k }
-      '7': { name: entity.name.function.k }
+      '7': { name: entity.name.function.op-decl.k }
     end: (?<=\})|(?=;)
     patterns:
     - include: '#comment'
@@ -2438,7 +2440,7 @@ repository:
       '1': { name: keyword.operator.null-conditional.k }
       '2': { name: punctuation.accessor.k }
       '3': { name: entity.name.type.alias.k }
-      '4': { name: entity.name.function.k }
+      '4': { name: entity.name.function.invoca-expr.k }
       '5':
         patterns:
         - include: '#type-arguments'

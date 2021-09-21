@@ -1350,7 +1350,7 @@
       ]
     },
     "method-declaration": {
-      "begin": "(?x)\n(?<return_type>\n  (?<type_name>\n    (?:\n      (?:ref\\s+(?:readonly\\s+)?)?   # ref return\n      (?:\n        (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n        (?<name_and_type_args> # identifier + type arguments (if any)\n          \\g<identifier>\\s*\n          (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n        )\n        (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n        (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n      )\n      (?:\\s*\\?\\s*)? # nullable suffix?\n      (?:\\s* # array suffix?\n        \\[\n          (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n        \\]\n        \\s*\n        (?:\\?)? # arrays can be nullable reference types\n        \\s*\n      )*\n    )\n  )\\s+\n)\n(?<interface_name>\\g<type_name>\\s*\\.\\s*)?\n(\\g<identifier>)\\s*\n(<([^<>]+)>)?\\s*\n(?=\\()",
+      "begin": "(?x)\n(?<return_type>\n  (?<type_name>\n    (?:\n      (?:(?:ref|export)\\s+(?:readonly\\s+)?)?   # ref return\n      (?:\n        (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n        (?<name_and_type_args> # identifier + type arguments (if any)\n          \\g<identifier>\\s*\n          (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n        )\n        (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n        (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n      )\n      (?:\\s*\\?\\s*)? # nullable suffix?\n      (?:\\s* # array suffix?\n        \\[\n          (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n        \\]\n        \\s*\n        (?:\\?)? # arrays can be nullable reference types\n        \\s*\n      )*\n    )\n  )\\s+\n)\n(?:([_[:alpha:]][_[:alnum:]]*)\\:\\:)?                 # namespace?\n(?<interface_name>\\g<type_name>\\s*\\.\\s*)?\n(\\g<identifier>)\\s*\n(<([^<>]+)>)?\\s*\n(?=\\()",
       "beginCaptures": {
         "1": {
           "patterns": [
@@ -1360,6 +1360,9 @@
           ]
         },
         "7": {
+          "name": "entity.name.type.alias.k"
+        },
+        "8": {
           "patterns": [
             {
               "include": "#type"
@@ -1369,10 +1372,10 @@
             }
           ]
         },
-        "8": {
-          "name": "entity.name.function.k"
-        },
         "9": {
+          "name": "entity.name.function.method.decl.k"
+        },
+        "10": {
           "patterns": [
             {
               "include": "#type-parameter-list"
@@ -1410,7 +1413,7 @@
           "match": "(@?[_[:alpha:]][_[:alnum:]]*)\\b",
           "captures": {
             "1": {
-              "name": "entity.name.function.k"
+              "name": "entity.name.function.ctor-decl.k"
             }
           }
         },
@@ -1469,7 +1472,7 @@
           "name": "punctuation.tilde.k"
         },
         "2": {
-          "name": "entity.name.function.k"
+          "name": "entity.name.function.dtor-decl.k"
         }
       },
       "end": "(?<=\\})|(?=;)",
@@ -1502,7 +1505,7 @@
           "name": "keyword.other.operator-decl.k"
         },
         "7": {
-          "name": "entity.name.function.k"
+          "name": "entity.name.function.op-decl.k"
         }
       },
       "end": "(?<=\\})|(?=;)",
@@ -3796,7 +3799,7 @@
           "name": "entity.name.type.alias.k"
         },
         "4": {
-          "name": "entity.name.function.k"
+          "name": "entity.name.function.invoca-expr.k"
         },
         "5": {
           "patterns": [
@@ -4598,7 +4601,7 @@
       }
     },
     "type-builtin": {
-      "match": "\\b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\\b",
+      "match": "\\b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket|lambda)\\b",
       "captures": {
         "1": {
           "name": "keyword.type.k"
