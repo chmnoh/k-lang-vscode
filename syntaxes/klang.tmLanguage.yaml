@@ -255,6 +255,7 @@ repository:
       - include: '#declarations'
       - include: '#using-directive'
       - include: '#punctuation-semicolon'
+      - include: '#script-top-level'
 
   storage-modifier:
     name: 'storage.modifier.k'
@@ -345,7 +346,7 @@ repository:
       end: (?=\{)
       patterns:
       - include: '#comment'
-      - match: (enum)\s+(@?[_[:alpha:]][_[:alnum:]]*)
+      - match: (enum)\s+(@?[_[:alpha:]][_[:alnum:]]*)?
         captures:
           '1': { name: keyword.other.enum.k }
           '2': { name: entity.name.type.enum.k }
@@ -1693,7 +1694,7 @@ repository:
     - include: '#statement'
 
   labeled-statement:
-    match: '(@?[_[:alpha:]][_[:alnum:]]*)\s*(:)'
+    match: '(@?[_[:alpha:]][_[:alnum:]]*)\s*(:)(?!:)'
     captures:
       '1': { name: entity.name.label.k }
       '2': { name: punctuation.separator.colon.k }
@@ -2421,14 +2422,16 @@ repository:
       (?x)
       (?:(\?)\s*)?                                     # preceding null-conditional operator?
       (?:(\.)\s*)?                                     # preceding dot?
+      (?:([_[:alpha:]][_[:alnum:]]*)\:\:)?                 # namespace?
       (@?[_[:alpha:]][_[:alnum:]]*)\s*                   # method name
       (?<type_args>\s*<([^<>]|\g<type_args>)+>\s*)?\s* # type arguments
       (?=\()                                           # open paren of argument list
     beginCaptures:
       '1': { name: keyword.operator.null-conditional.k }
       '2': { name: punctuation.accessor.k }
-      '3': { name: entity.name.function.k }
-      '4':
+      '3': { name: entity.name.type.alias.k }
+      '4': { name: entity.name.function.k }
+      '5':
         patterns:
         - include: '#type-arguments'
     end: (?<=\))
@@ -2660,7 +2663,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(\?|&)\s*)? # nullable suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -3029,6 +3032,7 @@ repository:
     - include: '#type-arguments'
     - include: '#type-array-suffix'
     - include: '#type-nullable-suffix'
+    - include: '#type-reference-suffix'
 
   ref-modifier:
     name: storage.modifier.k
@@ -3086,7 +3090,7 @@ repository:
       '6': { name: entity.name.variable.tuple-element.k }
 
   type-builtin:
-    match: \b(bool|byte|char|decimal|double|float|int|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic)\b
+    match: \b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\b
     captures:
       '1': { name: keyword.type.k }
 
@@ -3133,6 +3137,11 @@ repository:
     match: '\?'
     captures:
       '0': { name: punctuation.separator.question-mark.k }
+
+  type-reference-suffix:
+    match: '&'
+    captures:
+      '0': { name: punctuation.separator.reference-mark.k }
 
   operator-assignment:
     name: keyword.operator.assignment.k
