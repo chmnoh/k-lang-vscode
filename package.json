@@ -13,7 +13,7 @@
         "languages": [{
             "id": "klang",
             "aliases": ["K", "klang"],
-            "extensions": [".k .kql"],
+            "extensions": [".k", ".kql"],
             "configuration": "./language-configuration.json"
         }],
         "grammars": [{
