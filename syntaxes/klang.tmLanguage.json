@@ -2120,6 +2120,12 @@
         },
         {
           "include": "#kql-copy-volume-statement"
+        },
+        {
+          "include": "#kql-alias-statement"
+        },
+        {
+          "include": "#kql-printz-statement"
         }
       ]
     },
@@ -2414,6 +2420,46 @@
           "name": "entity.name.variable.k"
         }
       }
+    },
+    "kql-alias-statement": {
+      "begin": "(?<!\\.)\\b(?i:(alias))\\b\\s+([_[:alpha:]][_[:alnum:]]*)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.alias.k"
+        },
+        "2": {
+          "name": "entity.name.variable.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#string-literal"
+        },
+        {
+          "include": "#verbatim-string-literal"
+        },
+        {
+          "include": "#char-literal"
+        },
+        {
+          "include": "#string-3-dquote-literal"
+        }
+      ]
+    },
+    "kql-printz-statement": {
+      "begin": "(?<!\\.)\\b(printz|pprintz)\\b\\s+",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.printz.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#expression"
+        }
+      ]
     },
     "while-statement": {
       "begin": "(?<!\\.)\\b(while)\\b\\s*(?=\\()",
