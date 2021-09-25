@@ -200,6 +200,9 @@
           "include": "#while-statement"
         },
         {
+          "include": "#delete-statement"
+        },
+        {
           "include": "#do-statement"
         },
         {
@@ -618,7 +621,7 @@
       ]
     },
     "storage-modifier": {
-      "name": "storage.modifier.k",
+      "name": "storage.modifier-01.k",
       "match": "(?<!\\.)\\b(new|public|protected|internal|private|abstract|virtual|override|sealed|static|partial|readonly|volatile|const|extern|async|unsafe|ref)\\b"
     },
     "class-declaration": {
@@ -995,7 +998,7 @@
           "match": "\\b(in|out)\\b",
           "captures": {
             "1": {
-              "name": "storage.modifier.k"
+              "name": "storage.modifier-02.k"
             }
           }
         },
@@ -1057,7 +1060,7 @@
           "name": "keyword.other.where.k"
         },
         "2": {
-          "name": "storage.type.k"
+          "name": "storage.type-01.k"
         },
         "3": {
           "name": "punctuation.separator.colon.k"
@@ -1077,7 +1080,7 @@
           "match": "(new)\\s*(\\()\\s*(\\))",
           "captures": {
             "1": {
-              "name": "keyword.other.new.k"
+              "name": "keyword.other.new-01.k"
             },
             "2": {
               "name": "punctuation.parenthesis.open.k"
@@ -1281,7 +1284,7 @@
       },
       "patterns": [
         {
-          "name": "storage.modifier.k",
+          "name": "storage.modifier-03.k",
           "match": "\\b(private|protected|internal)\\b"
         },
         {
@@ -1600,7 +1603,7 @@
       "begin": "(?<!=|!)(=)(?!=|>)",
       "beginCaptures": {
         "1": {
-          "name": "keyword.operator.assignment.k"
+          "name": "keyword.operator.assignment-01.k"
         }
       },
       "end": "(?=[,\\)\\];}])",
@@ -1927,7 +1930,7 @@
           ]
         },
         "2": {
-          "name": "entity.name.variable.local.k"
+          "name": "entity.name.variable.local-01.k"
         }
       },
       "end": "(?==>)",
@@ -2130,19 +2133,27 @@
       ]
     },
     "kql-select-statement": {
-      "begin": "(?<!\\.)\\b(?i:(select))\\b\\s*(.+)\\s*\\b(?i:(from))\\b\\s+\\b([_[:alpha:]][_[:alnum:]]*)\\b",
+      "begin": "(?<!\\.)\\b(?i:(select))\\b\\s*(.+)\\s*\\b(?i:(from))\\b\\s+\\b([^\\s;]+)\\b",
       "beginCaptures": {
         "1": {
           "name": "keyword.query.select.k"
         },
         "2": {
-          "name": "entity.name.variable.k"
+          "patterns": [
+            {
+              "include": "#expression"
+            }
+          ]
         },
         "3": {
           "name": "keyword.query.from.k"
         },
         "4": {
-          "name": "entity.name.variable.k"
+          "patterns": [
+            {
+              "include": "#identifier"
+            }
+          ]
         }
       },
       "end": "(?=;)",
@@ -2235,7 +2246,7 @@
           "name": "entity.name.variable.range-variable.k"
         },
         "3": {
-          "name": "keyword.operator.assignment.k"
+          "name": "keyword.operator.assignment-02.k"
         }
       },
       "end": "(?=;)",
@@ -2645,7 +2656,7 @@
                   ]
                 },
                 "7": {
-                  "name": "entity.name.variable.local.k"
+                  "name": "entity.name.variable.local-02.k"
                 },
                 "8": {
                   "name": "keyword.control.loop.in.k"
@@ -2761,7 +2772,7 @@
                   ]
                 },
                 "6": {
-                  "name": "entity.name.variable.local.k"
+                  "name": "entity.name.variable.local-03.k"
                 }
               }
             }
@@ -2903,6 +2914,17 @@
         }
       }
     },
+    "delete-statement": {
+      "match": "\\b(delete)\\b\\s+(@?[_[:alpha:]][_[:alnum:]]*)\\s*;",
+      "captures": {
+        "1": {
+          "name": "keyword.other.delete-01.k"
+        },
+        "2": {
+          "name": "entity.name.variable.local-04.k"
+        }
+      }
+    },
     "local-declaration": {
       "patterns": [
         {
@@ -2920,16 +2942,16 @@
       ]
     },
     "local-variable-declaration": {
-      "begin": "(?x)\n(?:\n  (?:(\\busing)\\s+)?\n  (?:(\\bref)\\s+(?:(\\breadonly)\\s+)?)?(\\bvar\\b)| # ref local\n  (?<type_name>\n    (?:\n      (?:ref\\s+(?:readonly\\s+)?)?   # ref local\n      (?:\n        (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n        (?<name_and_type_args> # identifier + type arguments (if any)\n          \\g<identifier>\\s*\n          (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n        )\n        (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n        (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n      )\n      (?:\\s*\\?\\s*)? # nullable suffix?\n      (?:\\s* # array suffix?\n        \\[\n          (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n        \\]\n        \\s*\n        (?:\\?)? # arrays can be nullable reference types\n        \\s*\n      )*\n    )\n  )\n)\\s+\n(\\g<identifier>)\\s*\n(?!=>)\n(?=,|;|=|\\))",
+      "begin": "(?x)\n(?:\n  (?:(\\busing)\\s+)?\n  (?:(\\bref)\\s+(?:(\\breadonly)\\s+)?)?(\\bvar\\b)| # ref local\n  (?<type_name>\n    (?:\n      (?:ref\\s+(?:readonly\\s+)?)?   # ref local\n      (?:\n        (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n        (?<name_and_type_args> # identifier + type arguments (if any)\n          \\g<identifier>\\s*\n          (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n        )\n        (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n        (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n      )\n      (?:\\s*(?:\\?|\\*)\\s*)? # nullable/pointer suffix?\n      (?:\\s* # array suffix?\n        \\[\n          (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n        \\]\n        \\s*\n        (?:\\?)? # arrays can be nullable reference types\n        \\s*\n      )*\n    )\n  )\n)\\s+\n(\\g<identifier>)\\s*\n(?!=>)\n(?=,|;|=|\\))",
       "beginCaptures": {
         "1": {
           "name": "keyword.other.using.k"
         },
         "2": {
-          "name": "storage.modifier.k"
+          "name": "storage.modifier-04.k"
         },
         "3": {
-          "name": "storage.modifier.k"
+          "name": "storage.modifier-05.k"
         },
         "4": {
           "name": "keyword.other.var.k"
@@ -2942,13 +2964,13 @@
           ]
         },
         "10": {
-          "name": "entity.name.variable.local.k"
+          "name": "entity.name.variable.local-05.k"
         }
       },
       "end": "(?=;|\\))",
       "patterns": [
         {
-          "name": "entity.name.variable.local.k",
+          "name": "entity.name.variable.local-06.k",
           "match": "@?[_[:alpha:]][_[:alnum:]]*"
         },
         {
@@ -2966,7 +2988,7 @@
       "begin": "(?x)\n(?<const_keyword>\\b(?:const)\\b)\\s*\n(?<type_name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s+\n(\\g<identifier>)\\s*\n(?=,|;|=)",
       "beginCaptures": {
         "1": {
-          "name": "storage.modifier.k"
+          "name": "storage.modifier-06.k"
         },
         "2": {
           "patterns": [
@@ -2976,13 +2998,13 @@
           ]
         },
         "7": {
-          "name": "entity.name.variable.local.k"
+          "name": "entity.name.variable.local-07.k"
         }
       },
       "end": "(?=;)",
       "patterns": [
         {
-          "name": "entity.name.variable.local.k",
+          "name": "entity.name.variable.local-08.k",
           "match": "@?[_[:alpha:]][_[:alnum:]]*"
         },
         {
@@ -3125,7 +3147,7 @@
           ]
         },
         "7": {
-          "name": "entity.name.variable.local.k"
+          "name": "entity.name.variable.local-09.k"
         }
       }
     },
@@ -3386,10 +3408,10 @@
                       "name": "constant.numeric.other.exponent.k"
                     },
                     "9": {
-                      "name": "keyword.operator.arithmetic.k"
+                      "name": "keyword.operator.arithmetic-01.k"
                     },
                     "10": {
-                      "name": "keyword.operator.arithmetic.k"
+                      "name": "keyword.operator.arithmetic-02.k"
                     },
                     "11": {
                       "name": "constant.numeric.decimal.k",
@@ -3470,10 +3492,10 @@
                       "name": "constant.numeric.other.exponent.k"
                     },
                     "6": {
-                      "name": "keyword.operator.arithmetic.k"
+                      "name": "keyword.operator.arithmetic-03.k"
                     },
                     "7": {
-                      "name": "keyword.operator.arithmetic.k"
+                      "name": "keyword.operator.arithmetic-04.k"
                     },
                     "8": {
                       "name": "constant.numeric.decimal.k",
@@ -3667,7 +3689,7 @@
           "match": "\\&|~|\\^|\\|"
         },
         {
-          "name": "keyword.operator.assignment.k",
+          "name": "keyword.operator.assignment-03.k",
           "match": "\\="
         },
         {
@@ -3679,7 +3701,7 @@
           "match": "\\+\\+"
         },
         {
-          "name": "keyword.operator.arithmetic.k",
+          "name": "keyword.operator.arithmetic-05.k",
           "match": "%|\\*|/|-|\\+"
         },
         {
@@ -3953,7 +3975,7 @@
       "begin": "(?x)\n(new)\\s+\n(?<type_name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s*\n(?=\\()",
       "beginCaptures": {
         "1": {
-          "name": "keyword.other.new.k"
+          "name": "keyword.other.new-02.k"
         },
         "2": {
           "patterns": [
@@ -3974,7 +3996,7 @@
       "match": "(?x)\n(new)\\s+\n(?<type_name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s*\n(?=\\{|$)",
       "captures": {
         "1": {
-          "name": "keyword.other.new.k"
+          "name": "keyword.other.new-03.k"
         },
         "2": {
           "patterns": [
@@ -3989,7 +4011,7 @@
       "begin": "(?x)\n\\b(new|stackalloc)\\b\\s*\n(?<type_name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)?\\s*\n(?=\\[)",
       "beginCaptures": {
         "1": {
-          "name": "keyword.other.new.k"
+          "name": "keyword.other.new-04.k"
         },
         "2": {
           "patterns": [
@@ -4010,7 +4032,7 @@
       "begin": "\\b(new)\\b\\s*(?=\\{|$)",
       "beginCaptures": {
         "1": {
-          "name": "keyword.other.new.k"
+          "name": "keyword.other.new-05.k"
         }
       },
       "end": "(?<=\\})",
@@ -4092,7 +4114,7 @@
       "match": "(?x)\n(?:(?:\\b(ref|params|out|in|this)\\b)\\s+)?\n(?<type_name>\n  (?:\n    (?:ref\\s+)?   # ref return\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*(\\?|&|\\*)\\s*)? # nullable|reference|pointer suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s+\n(\\g<identifier>)",
       "captures": {
         "1": {
-          "name": "storage.modifier.k"
+          "name": "storage.modifier-07.k"
         },
         "2": {
           "patterns": [
@@ -4176,7 +4198,7 @@
     "argument": {
       "patterns": [
         {
-          "name": "storage.modifier.k",
+          "name": "storage.modifier-08.k",
           "match": "\\b(ref|out|in)\\b"
         },
         {
@@ -4249,7 +4271,7 @@
           "name": "entity.name.variable.range-variable.k"
         },
         "3": {
-          "name": "keyword.operator.assignment.k"
+          "name": "keyword.operator.assignment-04.k"
         }
       },
       "end": "(?=;|\\))",
@@ -4450,7 +4472,7 @@
           "begin": "(?x)\n(?:\\b(async)\\b\\s*)?\n(@?[_[:alpha:]][_[:alnum:]]*)\\b\\s*\n(=>)",
           "beginCaptures": {
             "1": {
-              "name": "storage.modifier.k"
+              "name": "storage.modifier-08.k"
             },
             "2": {
               "name": "entity.name.variable.parameter-02.k"
@@ -4476,7 +4498,7 @@
           "begin": "(?x)\n(?:\\b(async)\\b\\s*)?\n(\\(.*?\\))\\s*\n(=>)",
           "beginCaptures": {
             "1": {
-              "name": "storage.modifier.k"
+              "name": "storage.modifier-09.k"
             },
             "2": {
               "patterns": [
@@ -4506,7 +4528,7 @@
           "begin": "(?x)\n(?:\\b(async)\\b\\s*)?\n(?:\\b(delegate)\\b\\s*)",
           "beginCaptures": {
             "1": {
-              "name": "storage.modifier.k"
+              "name": "storage.modifier-10.k"
             },
             "2": {
               "name": "keyword.other.delegate.k"
@@ -4559,7 +4581,7 @@
       "match": "(?x)\n(?:\\b(ref|out|in)\\b)?\\s*\n(?:(?<type_name>\n  (?:\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*\\?\\s*)? # nullable suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s+)?\n(\\g<identifier>)\\b\\s*\n(?=[,)])",
       "captures": {
         "1": {
-          "name": "storage.modifier.k"
+          "name": "storage.modifier-11.k"
         },
         "2": {
           "patterns": [
@@ -4612,11 +4634,11 @@
       ]
     },
     "ref-modifier": {
-      "name": "storage.modifier.k",
+      "name": "storage.modifier-12.k",
       "match": "\\b(ref)\\b"
     },
     "readonly-modifier": {
-      "name": "storage.modifier.k",
+      "name": "storage.modifier-13.k",
       "match": "\\b(readonly)\\b"
     },
     "tuple-type": {
@@ -4657,10 +4679,13 @@
       }
     },
     "type-builtin": {
-      "match": "\\b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\\b",
+      "match": "\\b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\\b(\\*)?",
       "captures": {
         "1": {
-          "name": "keyword.type.k"
+          "name": "keyword.type.builtin.k"
+        },
+        "2": {
+          "name": "keyword.type.pointer.k"
         }
       }
     },
@@ -4681,7 +4706,7 @@
           "match": "(@?[_[:alpha:]][_[:alnum:]]*)\\s*(\\.)",
           "captures": {
             "1": {
-              "name": "storage.type.k"
+              "name": "storage.type-02.k"
             },
             "2": {
               "name": "punctuation.accessor.k"
@@ -4695,12 +4720,12 @@
               "name": "punctuation.accessor.k"
             },
             "2": {
-              "name": "storage.type.k"
+              "name": "storage.type-03.k"
             }
           }
         },
         {
-          "name": "storage.type.k",
+          "name": "storage.type-04.k",
           "match": "@?[_[:alpha:]][_[:alnum:]]*"
         }
       ]
@@ -4774,7 +4799,7 @@
       }
     },
     "operator-assignment": {
-      "name": "keyword.operator.assignment.k",
+      "name": "keyword.operator.assignment-05.k",
       "match": "(?<!=|!)(=)(?!=)"
     },
     "punctuation-comma": {

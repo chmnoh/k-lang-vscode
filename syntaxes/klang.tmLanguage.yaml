@@ -83,6 +83,7 @@ repository:
     - include: '#comment'
     - include: '#kql-statement'
     - include: '#while-statement'
+    - include: '#delete-statement'
     - include: '#do-statement'
     - include: '#for-in-statement'
     - include: '#for-to-statement'
@@ -259,7 +260,7 @@ repository:
       - include: '#script-top-level'
 
   storage-modifier:
-    name: 'storage.modifier.k'
+    name: 'storage.modifier-01.k'
     match: (?<!\.)\b(new|public|protected|internal|private|abstract|virtual|override|sealed|static|partial|readonly|volatile|const|extern|async|unsafe|ref)\b
 
   class-declaration:
@@ -472,7 +473,7 @@ repository:
     patterns:
     - match: \b(in|out)\b
       captures:
-        '1': { name: storage.modifier.k }
+        '1': { name: storage.modifier-02.k }
     - match: (@?[_[:alpha:]][_[:alnum:]]*)\b
       captures:
         '1': { name: entity.name.type.type-parameter.k }
@@ -501,7 +502,7 @@ repository:
     begin: (where)\s+(@?[_[:alpha:]][_[:alnum:]]*)\s*(:)
     beginCaptures:
       '1': { name: keyword.other.where.k }
-      '2': { name: storage.type.k }
+      '2': { name: storage.type-01.k }
       '3': { name: punctuation.separator.colon.k }
     end: (?=\{|where|;|=>)
     patterns:
@@ -511,7 +512,7 @@ repository:
       match: \bstruct\b
     - match: (new)\s*(\()\s*(\))
       captures:
-        '1': { name: keyword.other.new.k }
+        '1': { name: keyword.other.new-01.k }
         '2': { name: punctuation.parenthesis.open.k }
         '3': { name: punctuation.parenthesis.close.k }
     - include: '#type'
@@ -737,7 +738,7 @@ repository:
     endCaptures:
       '0': { name: punctuation.curlybrace.close.k }
     patterns:
-    - name: storage.modifier.k
+    - name: storage.modifier-03.k
       match: \b(private|protected|internal)\b
     - name: keyword.other.get.k
       match: \b(get)\b
@@ -977,7 +978,7 @@ repository:
   variable-initializer:
     begin: (?<!=|!)(=)(?!=|>)
     beginCaptures:
-      '1': { name: keyword.operator.assignment.k }
+      '1': { name: keyword.operator.assignment-01.k }
     end: (?=[,\)\];}])
     patterns:
     - include: '#ref-modifier'
@@ -1166,7 +1167,7 @@ repository:
       '1':
         patterns:
         - include: '#type'
-      '2': { name: entity.name.variable.local.k }
+      '2': { name: entity.name.variable.local-01.k }
     end: (?==>)
     patterns:
       - include: '#comment'
@@ -1286,12 +1287,16 @@ repository:
 
 
   kql-select-statement:
-    begin: (?<!\.)\b(?i:(select))\b\s*(.+)\s*\b(?i:(from))\b\s+\b([_[:alpha:]][_[:alnum:]]*)\b
+    begin: (?<!\.)\b(?i:(select))\b\s*(.+)\s*\b(?i:(from))\b\s+\b([^\s;]+)\b
     beginCaptures:
       '1': { name: keyword.query.select.k }
-      '2': { name: entity.name.variable.k }
+      '2':
+        patterns:
+          - include: '#expression'
       '3': { name: keyword.query.from.k }
-      '4': { name: entity.name.variable.k }
+      '4': 
+        patterns:
+          - include: '#identifier'
     end: (?=;)
     patterns:
       - include: '#where-clause'
@@ -1342,7 +1347,7 @@ repository:
     beginCaptures:
       '1': { name: keyword.query.set.k }
       '2': { name: entity.name.variable.range-variable.k }
-      '3': { name: keyword.operator.assignment.k }
+      '3': { name: keyword.operator.assignment-02.k }
     end: (?=;)
     patterns:
     - include: '#query-body'
@@ -1581,7 +1586,7 @@ repository:
           # '4': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
           # '5': ?<type_args> is a sub-expression. Its final value is not considered.
           # '6': ?<tuple> is a sub-expression. Its final value is not considered.
-          '7': { name: entity.name.variable.local.k }
+          '7': { name: entity.name.variable.local-02.k }
           '8': { name: keyword.control.loop.in.k }
       - match: |-
           (?x) # match foreach (var (x, y) in ...)
@@ -1667,7 +1672,7 @@ repository:
           # '3': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
           # '4': ?<type_args> is a sub-expression. Its final value is not considered.
           # '5': ?<tuple> is a sub-expression. Its final value is not considered.
-          '6': { name: entity.name.variable.local.k }
+          '6': { name: entity.name.variable.local-03.k }
     - include: '#when-clause'
     - include: '#comment'
     - include: '#block'
@@ -1733,6 +1738,12 @@ repository:
       '1': { name: entity.name.label.k }
       '2': { name: punctuation.separator.colon.k }
 
+  delete-statement:
+    match: '\b(delete)\b\s+(@?[_[:alpha:]][_[:alnum:]]*)\s*;'
+    captures:
+      '1': { name: keyword.other.delete-01.k }
+      '2': { name: entity.name.variable.local-04.k }
+
   local-declaration:
     patterns:
     - include: '#local-constant-declaration'
@@ -1758,7 +1769,7 @@ repository:
               (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
               (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
             )
-            (?:\s*\?\s*)? # nullable suffix?
+            (?:\s*(?:\?|\*)\s*)? # nullable/pointer suffix?
             (?:\s* # array suffix?
               \[
                 (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -1775,8 +1786,8 @@ repository:
       (?=,|;|=|\))
     beginCaptures:
       '1': { name: keyword.other.using.k }
-      '2': { name: storage.modifier.k }
-      '3': { name: storage.modifier.k }
+      '2': { name: storage.modifier-04.k }
+      '3': { name: storage.modifier-05.k }
       '4': { name: keyword.other.var.k }
       '5':
         patterns:
@@ -1785,10 +1796,10 @@ repository:
       # '7': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
       # '8': ?<type_args> is a sub-expression. Its final value is not considered.
       # '9': ?<tuple> is a sub-expression. Its final value is not considered.
-      '10': { name: entity.name.variable.local.k }
+      '10': { name: entity.name.variable.local-05.k }
     end: (?=;|\))
     patterns:
-    - name: entity.name.variable.local.k
+    - name: entity.name.variable.local-06.k
       match: '@?[_[:alpha:]][_[:alnum:]]*'
     - include: '#punctuation-comma'
     - include: '#comment'
@@ -1823,7 +1834,7 @@ repository:
       (\g<identifier>)\s*
       (?=,|;|=)
     beginCaptures:
-      '1': { name: storage.modifier.k }
+      '1': { name: storage.modifier-06.k }
       '2':
         patterns:
         - include: '#type'
@@ -1831,10 +1842,10 @@ repository:
       # '4': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
       # '5': ?<type_args> is a sub-expression. Its final value is not considered.
       # '6': ?<tuple> is a sub-expression. Its final value is not considered.
-      '7': { name: entity.name.variable.local.k }
+      '7': { name: entity.name.variable.local-07.k }
     end: (?=;)
     patterns:
-    - name: entity.name.variable.local.k
+    - name: entity.name.variable.local-08.k
       match: '@?[_[:alpha:]][_[:alnum:]]*'
     - include: '#punctuation-comma'
     - include: '#comment'
@@ -1945,7 +1956,7 @@ repository:
       # '4': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
       # '5': ?<type_args> is a sub-expression. Its final value is not considered.
       # '6': ?<tuple> is a sub-expression. Its final value is not considered.
-      '7': { name: entity.name.variable.local.k }
+      '7': { name: entity.name.variable.local-09.k }
 
   declaration-expression-tuple:
     match: |-
@@ -2116,9 +2127,9 @@ repository:
               '8':
                 name: constant.numeric.other.exponent.k
               '9':
-                name: keyword.operator.arithmetic.k
+                name: keyword.operator.arithmetic-01.k
               '10':
-                name: keyword.operator.arithmetic.k
+                name: keyword.operator.arithmetic-02.k
               '11':
                 name: constant.numeric.decimal.k
                 patterns:
@@ -2167,9 +2178,9 @@ repository:
               '5':
                 name: constant.numeric.other.exponent.k
               '6':
-                name: keyword.operator.arithmetic.k
+                name: keyword.operator.arithmetic-03.k
               '7':
-                name: keyword.operator.arithmetic.k
+                name: keyword.operator.arithmetic-04.k
               '8':
                 name: constant.numeric.decimal.k
                 patterns:
@@ -2279,13 +2290,13 @@ repository:
       match: \!|&&|\|\|
     - name: keyword.operator.bitwise.k
       match: \&|~|\^|\|
-    - name: keyword.operator.assignment.k
+    - name: keyword.operator.assignment-03.k
       match: \=
     - name: keyword.operator.decrement.k
       match: --
     - name: keyword.operator.increment.k
       match: \+\+
-    - name: keyword.operator.arithmetic.k
+    - name: keyword.operator.arithmetic-05.k
       match: '%|\*|/|-|\+'
     - name: keyword.operator.null-coalescing.k
       match: \?\?
@@ -2566,7 +2577,7 @@ repository:
       )\s*
       (?=\()
     beginCaptures:
-      '1': { name: keyword.other.new.k }
+      '1': { name: keyword.other.new-02.k }
       '2':
         patterns:
         - include: '#type'
@@ -2602,7 +2613,7 @@ repository:
       )\s*
       (?=\{|$)
     captures:
-      '1': { name: keyword.other.new.k }
+      '1': { name: keyword.other.new-03.k }
       '2':
         patterns:
         - include: '#type'
@@ -2635,7 +2646,7 @@ repository:
       )?\s*
       (?=\[)
     beginCaptures:
-      '1': { name: keyword.other.new.k }
+      '1': { name: keyword.other.new-04.k }
       '2':
         patterns:
         - include: '#type'
@@ -2646,7 +2657,7 @@ repository:
   anonymous-object-creation-expression:
     begin: \b(new)\b\s*(?=\{|$)
     beginCaptures:
-      '1': { name: keyword.other.new.k }
+      '1': { name: keyword.other.new-05.k }
     end: (?<=\})
     patterns:
     - include: '#initializer-expression'
@@ -2712,7 +2723,7 @@ repository:
       )\s+
       (\g<identifier>)
     captures:
-      '1': { name: storage.modifier.k }
+      '1': { name: storage.modifier-07.k }
       '2':
         patterns:
         - include: '#type'
@@ -2757,7 +2768,7 @@ repository:
 
   argument:
     patterns:
-    - name: storage.modifier.k
+    - name: storage.modifier-08.k
       match: \b(ref|out|in)\b
     - include: '#declaration-expression-local'
     - include: '#expression'
@@ -2824,7 +2835,7 @@ repository:
     beginCaptures:
       '1': { name: keyword.query.let.k }
       '2': { name: entity.name.variable.range-variable.k }
-      '3': { name: keyword.operator.assignment.k }
+      '3': { name: keyword.operator.assignment-04.k }
     end: (?=;|\))
     patterns:
     - include: '#query-body'
@@ -2968,7 +2979,7 @@ repository:
         (@?[_[:alpha:]][_[:alnum:]]*)\b\s*
         (=>)
       beginCaptures:
-        '1': { name: storage.modifier.k }
+        '1': { name: storage.modifier-08.k }
         '2': { name: entity.name.variable.parameter-02.k }
         '3': { name: keyword.operator.arrow.k }
       end: (?=\)|;|}|,)
@@ -2982,7 +2993,7 @@ repository:
         (\(.*?\))\s*
         (=>)
       beginCaptures:
-        '1': { name: storage.modifier.k }
+        '1': { name: storage.modifier-09.k }
         '2':
           patterns:
           - include: '#lambda-parameter-list'
@@ -2997,7 +3008,7 @@ repository:
         (?:\b(async)\b\s*)?
         (?:\b(delegate)\b\s*)
       beginCaptures:
-        '1': { name: storage.modifier.k }
+        '1': { name: storage.modifier-10.k }
         '2': { name: keyword.other.delegate.k }
       end: (?=\)|;|}|,)
       patterns:
@@ -3046,7 +3057,7 @@ repository:
       (\g<identifier>)\b\s*
       (?=[,)])
     captures:
-      '1': { name: storage.modifier.k }
+      '1': { name: storage.modifier-11.k }
       '2':
         patterns:
         - include: '#type'
@@ -3072,11 +3083,11 @@ repository:
     - include: '#type-pointer-suffix'
 
   ref-modifier:
-    name: storage.modifier.k
+    name: storage.modifier-12.k
     match: \b(ref)\b
 
   readonly-modifier:
-    name: storage.modifier.k
+    name: storage.modifier-13.k
     match: \b(readonly)\b
 
   tuple-type:
@@ -3129,9 +3140,10 @@ repository:
       '6': { name: entity.name.variable.tuple-element-04.k }
 
   type-builtin:
-    match: \b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\b
+    match: \b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\b(\*)?
     captures:
-      '1': { name: keyword.type.k }
+      '1': { name: keyword.type.builtin.k }
+      '2': { name: keyword.type.pointer.k }
 
   type-name:
     patterns:
@@ -3141,13 +3153,13 @@ repository:
         '2': { name: punctuation.separator.coloncolon.k }
     - match: (@?[_[:alpha:]][_[:alnum:]]*)\s*(\.)
       captures:
-        '1': { name: storage.type.k }
+        '1': { name: storage.type-02.k }
         '2': { name: punctuation.accessor.k }
     - match: (\.)\s*(@?[_[:alpha:]][_[:alnum:]]*)
       captures:
         '1': { name: punctuation.accessor.k }
-        '2': { name: storage.type.k }
-    - name: storage.type.k
+        '2': { name: storage.type-03.k }
+    - name: storage.type-04.k
       match: '@?[_[:alpha:]][_[:alnum:]]*'
 
   type-arguments:
@@ -3188,7 +3200,7 @@ repository:
       '0': { name: punctuation.separator.pointer-mark.k }
 
   operator-assignment:
-    name: keyword.operator.assignment.k
+    name: keyword.operator.assignment-05.k
     match: (?<!=|!)(=)(?!=)
 
   punctuation-comma:
