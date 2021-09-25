@@ -1887,7 +1887,7 @@ repository:
         (@?[_[:alpha:]][_[:alnum:]]*)\b\s*
         (?=[,)])
       captures:
-        '1': { name: entity.name.variable.tuple-element.k }
+        '1': { name: entity.name.variable.tuple-element-01.k }
   tuple-deconstruction-element-list:
     begin: \(
     beginCaptures:
@@ -1986,7 +1986,7 @@ repository:
       # '4': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
       # '5': ?<type_args> is a sub-expression. Its final value is not considered.
       # '6': ?<tuple> is a sub-expression. Its final value is not considered.
-      '7': { name: entity.name.variable.tuple-element.k }
+      '7': { name: entity.name.variable.tuple-element-02.k }
 
   checked-unchecked-expression:
     begin: (?<!\.)\b(?:(checked)|(unchecked))\b\s*(\()
@@ -2254,10 +2254,10 @@ repository:
   tuple-literal-element:
     begin: |-
       (?x)
-      (?:(@?[_[:alpha:]][_[:alnum:]]*)\s*(:)\s*)?
+      (?:(@?[_[:alpha:]][_[:alnum:]]*)\s*(:)(?!:)\s*)?
       (?![,)])
     beginCaptures:
-      '0': { name: entity.name.variable.tuple-element.k }
+      '0': { name: entity.name.variable.tuple-element-03.k }
       '1': { name: punctuation.separator.colon.k }
     end: (?=[,)])
     patterns:
@@ -2720,7 +2720,7 @@ repository:
       # '4': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
       # '5': ?<type_args> is a sub-expression. Its final value is not considered.
       # '6': ?<tuple> is a sub-expression. Its final value is not considered.
-      '7': { name: entity.name.variable.parameter.k }
+      '7': { name: entity.name.variable.parameter-00.k }
 
   argument-list:
     begin: \(
@@ -2747,9 +2747,9 @@ repository:
     - include: '#punctuation-comma'
 
   named-argument:
-    begin: (@?[_[:alpha:]][_[:alnum:]]*)\s*(:)
+    begin: (@?[_[:alpha:]][_[:alnum:]]*)\s*(:)(?!:)
     beginCaptures:
-      '1': { name: entity.name.variable.parameter.k }
+      '1': { name: entity.name.variable.parameter-01.k }
       '2': { name: punctuation.separator.colon.k }
     end: (?=(,|\)|\]))
     patterns:
@@ -2969,7 +2969,7 @@ repository:
         (=>)
       beginCaptures:
         '1': { name: storage.modifier.k }
-        '2': { name: entity.name.variable.parameter.k }
+        '2': { name: entity.name.variable.parameter-02.k }
         '3': { name: keyword.operator.arrow.k }
       end: (?=\)|;|}|,)
       patterns:
@@ -3054,7 +3054,7 @@ repository:
       # '4': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
       # '5': ?<type_args> is a sub-expression. Its final value is not considered.
       # '6': ?<tuple> is a sub-expression. Its final value is not considered.
-      '7': { name: entity.name.variable.parameter.k }
+      '7': { name: entity.name.variable.parameter-03.k }
 
   type:
     name: meta.type.k
@@ -3120,11 +3120,13 @@ repository:
       '1':
         patterns:
         - include: '#type'
-      # '2': ?<identifier> is a sub-expression. Its final value is not considered.
+      # '2': 
+      #   patterns:
+      #   - include: '#identifier'
       # '3': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
       # '4': ?<type_args> is a sub-expression. Its final value is not considered.
       # '5': ?<tuple> is a sub-expression. Its final value is not considered.
-      '6': { name: entity.name.variable.tuple-element.k }
+      '6': { name: entity.name.variable.tuple-element-04.k }
 
   type-builtin:
     match: \b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\b

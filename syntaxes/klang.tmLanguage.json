@@ -3069,7 +3069,7 @@
           "match": "(?x) # e.g. x\n(@?[_[:alpha:]][_[:alnum:]]*)\\b\\s*\n(?=[,)])",
           "captures": {
             "1": {
-              "name": "entity.name.variable.tuple-element.k"
+              "name": "entity.name.variable.tuple-element-01.k"
             }
           }
         }
@@ -3143,7 +3143,7 @@
           ]
         },
         "7": {
-          "name": "entity.name.variable.tuple-element.k"
+          "name": "entity.name.variable.tuple-element-02.k"
         }
       }
     },
@@ -3620,10 +3620,10 @@
       ]
     },
     "tuple-literal-element": {
-      "begin": "(?x)\n(?:(@?[_[:alpha:]][_[:alnum:]]*)\\s*(:)\\s*)?\n(?![,)])",
+      "begin": "(?x)\n(?:(@?[_[:alpha:]][_[:alnum:]]*)\\s*(:)(?!:)\\s*)?\n(?![,)])",
       "beginCaptures": {
         "0": {
-          "name": "entity.name.variable.tuple-element.k"
+          "name": "entity.name.variable.tuple-element-03.k"
         },
         "1": {
           "name": "punctuation.separator.colon.k"
@@ -4102,7 +4102,7 @@
           ]
         },
         "7": {
-          "name": "entity.name.variable.parameter.k"
+          "name": "entity.name.variable.parameter-00.k"
         }
       }
     },
@@ -4157,10 +4157,10 @@
       ]
     },
     "named-argument": {
-      "begin": "(@?[_[:alpha:]][_[:alnum:]]*)\\s*(:)",
+      "begin": "(@?[_[:alpha:]][_[:alnum:]]*)\\s*(:)(?!:)",
       "beginCaptures": {
         "1": {
-          "name": "entity.name.variable.parameter.k"
+          "name": "entity.name.variable.parameter-01.k"
         },
         "2": {
           "name": "punctuation.separator.colon.k"
@@ -4453,7 +4453,7 @@
               "name": "storage.modifier.k"
             },
             "2": {
-              "name": "entity.name.variable.parameter.k"
+              "name": "entity.name.variable.parameter-02.k"
             },
             "3": {
               "name": "keyword.operator.arrow.k"
@@ -4569,7 +4569,7 @@
           ]
         },
         "7": {
-          "name": "entity.name.variable.parameter.k"
+          "name": "entity.name.variable.parameter-03.k"
         }
       }
     },
@@ -4652,7 +4652,7 @@
           ]
         },
         "6": {
-          "name": "entity.name.variable.tuple-element.k"
+          "name": "entity.name.variable.tuple-element-04.k"
         }
       }
     },
