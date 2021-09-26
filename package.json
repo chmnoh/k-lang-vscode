@@ -1,6 +1,8 @@
 {
     "name": "k-lang",
     "displayName": "K Lang",
+    "publisher":"chmn-oh",
+    "repository": "https://github.com/chmnoh/k-lang-vscode",
     "description": "Syntax highlighting for K lang",
     "version": "0.0.1",
     "engines": {
