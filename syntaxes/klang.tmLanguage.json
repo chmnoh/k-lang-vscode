@@ -35,6 +35,9 @@
           "include": "#import-directive"
         },
         {
+          "include": "#include-directive"
+        },
+        {
           "include": "#attribute-section"
         },
         {
@@ -483,6 +486,36 @@
                   "name": "keyword.other.namespace.k"
                 }
               }
+            }
+          ]
+        }
+      ]
+    },
+    "include-directive": {
+      "patterns": [
+        {
+          "begin": "^([\\#]*include)\\s+",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.other.using.include.k"
+            }
+          },
+          "end": "(?=\\n)",
+          "patterns": [
+            {
+              "include": "#comment"
+            },
+            {
+              "include": "#string-literal"
+            },
+            {
+              "include": "#char-literal"
+            },
+            {
+              "include": "#string-3-dquote-literal"
+            },
+            {
+              "include": "#verbatim-string-literal"
             }
           ]
         }
@@ -4852,6 +4885,9 @@
           "include": "#preprocessor-r"
         },
         {
+          "include": "#preprocessor-include"
+        },
+        {
           "include": "#preprocessor-line"
         },
         {
@@ -4926,6 +4962,25 @@
       "beginCaptures": {
         "1": {
           "name": "keyword.preprocessor.load.k"
+        }
+      },
+      "end": "(?=$)",
+      "patterns": [
+        {
+          "match": "\\\"[^\"]*\\\"",
+          "captures": {
+            "0": {
+              "name": "string.quoted.double.k"
+            }
+          }
+        }
+      ]
+    },
+    "preprocessor-include": {
+      "begin": "\\b(include)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.preprocessor.include.k"
         }
       },
       "end": "(?=$)",
