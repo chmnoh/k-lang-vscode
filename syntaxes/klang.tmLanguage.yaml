@@ -233,7 +233,7 @@ repository:
   attribute-arguments:
     begin: (\()
     beginCaptures:
-      '1': { name: punctuation.parenthesis.open.k }
+      '1': { name: punctuation.parenthesis.open-1.k }
     end: (\))
     endCaptures:
       '1': { name: punctuation.parenthesis.close.k }
@@ -263,7 +263,7 @@ repository:
     - include: '#punctuation-accessor'
     - begin: \{
       beginCaptures:
-        '0': { name: punctuation.curlybrace.open.k }
+        '0': { name: punctuation.curlybrace.open-01.k }
       end: \}
       endCaptures:
         '0': { name: punctuation.curlybrace.close.k }
@@ -296,7 +296,7 @@ repository:
       - include: '#generic-constraints'
     - begin: \{
       beginCaptures:
-        '0': { name: punctuation.curlybrace.open.k }
+        '0': { name: punctuation.curlybrace.open-02.k }
       end: \}
       endCaptures:
         '0': { name: punctuation.curlybrace.close.k }
@@ -374,7 +374,7 @@ repository:
         - include: '#type'
     - begin: \{
       beginCaptures:
-        '0': { name: punctuation.curlybrace.open.k }
+        '0': { name: punctuation.curlybrace.open-03.k }
       end: \}
       endCaptures:
         '0': { name: punctuation.curlybrace.close.k }
@@ -412,7 +412,7 @@ repository:
       - include: '#generic-constraints'
     - begin: \{
       beginCaptures:
-        '0': { name: punctuation.curlybrace.open.k }
+        '0': { name: punctuation.curlybrace.open-04.k }
       end: \}
       endCaptures:
         '0': { name: punctuation.curlybrace.close.k }
@@ -440,7 +440,7 @@ repository:
       - include: '#generic-constraints'
     - begin: \{
       beginCaptures:
-        '0': { name: punctuation.curlybrace.open.k }
+        '0': { name: punctuation.curlybrace.open-05.k }
       end: \}
       endCaptures:
         '0': { name: punctuation.curlybrace.close.k }
@@ -468,7 +468,7 @@ repository:
       - include: '#generic-constraints'
     - begin: \{
       beginCaptures:
-        '0': { name: punctuation.curlybrace.open.k }
+        '0': { name: punctuation.curlybrace.open-06.k }
       end: \}
       endCaptures:
         '0': { name: punctuation.curlybrace.close.k }
@@ -527,7 +527,7 @@ repository:
     - match: (new)\s*(\()\s*(\))
       captures:
         '1': { name: keyword.other.new-01.k }
-        '2': { name: punctuation.parenthesis.open.k }
+        '2': { name: punctuation.parenthesis.open-2.k }
         '3': { name: punctuation.parenthesis.close.k }
     - include: '#type'
     - include: '#punctuation-comma'
@@ -747,7 +747,7 @@ repository:
   property-accessors:
     begin: \{
     beginCaptures:
-      '0': { name: punctuation.curlybrace.open.k }
+      '0': { name: punctuation.curlybrace.open-07.k }
     end: \}
     endCaptures:
       '0': { name: punctuation.curlybrace.close.k }
@@ -769,7 +769,7 @@ repository:
   event-accessors:
     begin: \{
     beginCaptures:
-      '0': { name: punctuation.curlybrace.open.k }
+      '0': { name: punctuation.curlybrace.open-08.k }
     end: \}
     endCaptures:
       '0': { name: punctuation.curlybrace.close.k }
@@ -982,7 +982,7 @@ repository:
   block:
     begin: \{
     beginCaptures:
-      '0': { name: punctuation.curlybrace.open.k }
+      '0': { name: punctuation.curlybrace.open-09.k }
     end: \}
     endCaptures:
       '0': { name: punctuation.curlybrace.close.k }
@@ -1086,7 +1086,7 @@ repository:
     patterns:
     - begin: \(
       beginCaptures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-3.k }
       end: \)
       endCaptures:
         '0': { name: punctuation.parenthesis.close.k }
@@ -1110,7 +1110,7 @@ repository:
     patterns:
     - begin: \(
       beginCaptures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-4.k }
       end: \)
       endCaptures:
         '0': { name: punctuation.parenthesis.close.k }
@@ -1118,7 +1118,7 @@ repository:
       - include: '#expression'
     - begin: \{
       beginCaptures:
-        '0': { name: punctuation.curlybrace.open.k }
+        '0': { name: punctuation.curlybrace.open-10.k }
       end: \}
       endCaptures:
         '0': { name: punctuation.curlybrace.close.k }
@@ -1136,7 +1136,7 @@ repository:
     patterns:
     - begin: \{
       beginCaptures:
-        '0': { name: punctuation.curlybrace.open.k }
+        '0': { name: punctuation.curlybrace.open-11.k }
       end: \}
       endCaptures:
         '0': { name: punctuation.curlybrace.close.k }
@@ -1217,8 +1217,8 @@ repository:
       '1':
         patterns:
         - include: '#type'
-      # '': { name: punctuation.curlybrace.open.k }
-      '6': { name: punctuation.curlybrace.open.k }
+      # '': { name: punctuation.curlybrace.open-12.k }
+      '6': { name: punctuation.curlybrace.open-13.k }
     end: \}
     endCaptures:
       '0': { name: punctuation.curlybrace.close.k }
@@ -1245,7 +1245,7 @@ repository:
     begin: (?<!\.)\b(when)\b\s*(\()?
     beginCaptures:
       '1': { name: keyword.control.try.when.k }
-      '2': { name: punctuation.parenthesis.open.k }
+      '2': { name: punctuation.parenthesis.open-5.k }
     end: (?==>)
     patterns:
     - include: '#comment'
@@ -1253,7 +1253,7 @@ repository:
     - include: '#punctuation-comma'
     - match: \(
       captures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-6.k }
     - match: \)
       captures:
         '0': { name: punctuation.parenthesis.close.k }
@@ -1478,7 +1478,7 @@ repository:
       '1': { name: keyword.query.printz.k }
     end: (?=;)
     patterns:
-    - include: '#expression'
+      - include: '#expression'
 
   while-statement:
     begin: (?<!\.)\b(while)\b\s*(?=\()
@@ -1488,7 +1488,7 @@ repository:
     patterns:
     - begin: \(
       beginCaptures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-7.k }
       end: \)
       endCaptures:
         '0': { name: punctuation.parenthesis.close.k }
@@ -1497,37 +1497,27 @@ repository:
     - include: '#statement'
 
   for-in-statement:
-    begin: (?<!\.)\b(for)\b\s*\b([_[:alpha:]][_[:alnum:]]*)\b\s+\b
+    begin: (?<!\.)\b(for)\b\s*\b([_[:alpha:]][_[:alnum:]]*)\b\s+\b(in)\b
     beginCaptures:
-      '1': { name: keyword.control.loop.for.k }
+      '1': { name: keyword.control.loop.for-in.k }
       '2': { name: variable.other.readwrite.k }
-    end: (?<=\})|(?=;)
+      '3': { name: keyword.control.loop.for-in.k }
+    end: (?<=\})
     patterns:
-    - begin: (?:\b(in)\b)
-      beginCaptures:
-        '1': {name: keyword.control.loop.in.k}
-      end: (\{)
-      endCaptures:
-        '1': {name: punctuation.curlybrace.open.k}
-      patterns:
-        - include: '#expression'
+    - include: '#block'
+    - include: '#expression'
     - include: '#statement'
 
   for-to-statement:
-    begin: (?<!\.)\b(for)\b\s*\b([_[:alpha:]][_[:alnum:]]*)\s*=\s*([[:digit:]]+)\b\s+\b
+    begin: (?<!\.)\b(for)\b\s*\b([_[:alpha:]][_[:alnum:]]*)\s*=\s*([[:digit:]]+)\b\s+\b(to)\b\s+
     beginCaptures:
       '1': { name: keyword.control.loop.for-to.k }
       '2': { name: variable.other.readwrite.k }
+      '4': { name: keyword.control.loop.for-to.k }
     end: (?<=\})|(?=;)
     patterns:
-    - begin: (?:\b(to)\b)
-      beginCaptures:
-        '1': {name: keyword.control.loop.to.k}
-      end: (\{)|(?:;)
-      endCaptures:
-        '1': {name: punctuation.curlybrace.open.for-to.k}
-      patterns:
-        - include: '#expression'
+    - include: '#block'
+    - include: '#expression'
     - include: '#statement'
 
   for-statement:
@@ -1538,7 +1528,7 @@ repository:
     patterns:
     - begin: \(
       beginCaptures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-8.k }
       end: \)
       endCaptures:
         '0': { name: punctuation.parenthesis.close.k }
@@ -1557,7 +1547,7 @@ repository:
     patterns:
     - begin: \(
       beginCaptures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-9.k }
       end: \)
       endCaptures:
         '0': { name: punctuation.parenthesis.close.k }
@@ -1648,7 +1638,7 @@ repository:
     patterns:
     - begin: \(
       beginCaptures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-10.k }
       end: \)
       endCaptures:
         '0': { name: punctuation.parenthesis.close.k }
@@ -1695,7 +1685,7 @@ repository:
     begin: (?<!\.)\b(when)\b\s*(\()
     beginCaptures:
       '1': { name: keyword.control.try.when.k }
-      '2': { name: punctuation.parenthesis.open.k }
+      '2': { name: punctuation.parenthesis.open-11.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -1721,7 +1711,7 @@ repository:
     patterns:
     - begin: \(
       beginCaptures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-12.k }
       end: \)
       endCaptures:
         '0': { name: punctuation.parenthesis.close.k }
@@ -1737,7 +1727,7 @@ repository:
     patterns:
     - begin: \(
       beginCaptures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-13.k }
       end: \)
       endCaptures:
         '0': { name: punctuation.parenthesis.close.k }
@@ -1898,7 +1888,7 @@ repository:
   tuple-declaration-deconstruction-element-list:
     begin: \(
     beginCaptures:
-      '0': { name: punctuation.parenthesis.open.k }
+      '0': { name: punctuation.parenthesis.open-14.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -1916,7 +1906,7 @@ repository:
   tuple-deconstruction-element-list:
     begin: \(
     beginCaptures:
-      '0': { name: punctuation.parenthesis.open.k }
+      '0': { name: punctuation.parenthesis.open-15.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -2018,7 +2008,7 @@ repository:
     beginCaptures:
       '1': { name: keyword.other.checked.k }
       '2': { name: keyword.other.unchecked.k }
-      '3': { name: punctuation.parenthesis.open.k }
+      '3': { name: punctuation.parenthesis.open-16.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -2030,7 +2020,7 @@ repository:
     beginCaptures:
       '1': { name: keyword.other.typeof.k }
       '2': { name: keyword.other.default.k }
-      '3': { name: punctuation.parenthesis.open.k }
+      '3': { name: punctuation.parenthesis.open-17.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -2041,7 +2031,7 @@ repository:
     begin: (?<!\.)\b(nameof)\b\s*(\()
     beginCaptures:
       '1': { name: keyword.other.nameof.k }
-      '2': { name: punctuation.parenthesis.open.k }
+      '2': { name: punctuation.parenthesis.open-18.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -2267,7 +2257,7 @@ repository:
   tuple-literal:
     begin: (\()(?=.*[:,])
     beginCaptures:
-      '1': { name: punctuation.parenthesis.open.k }
+      '1': { name: punctuation.parenthesis.open-19.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -2346,7 +2336,7 @@ repository:
   parenthesized-expression:
     begin: \(
     beginCaptures:
-      '0': { name: punctuation.parenthesis.open.k }
+      '0': { name: punctuation.parenthesis.open-20.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -2356,7 +2346,7 @@ repository:
   initializer-expression:
     begin: \{
     beginCaptures:
-      '0': { name: punctuation.curlybrace.open.k }
+      '0': { name: punctuation.curlybrace.open-15.k }
     end: \}
     endCaptures:
       '0': { name: punctuation.curlybrace.close.k }
@@ -2398,7 +2388,7 @@ repository:
       )\s*
       (\))(?=\s*-*!*@?[_[:alnum:]\(])
     captures:
-      '1': { name: punctuation.parenthesis.open.k }
+      '1': { name: punctuation.parenthesis.open-21.k }
       '2':
         patterns:
         - include: '#type'
@@ -2697,7 +2687,7 @@ repository:
   parenthesized-parameter-list:
     begin: (\()
     beginCaptures:
-      '0': { name: punctuation.parenthesis.open.k }
+      '0': { name: punctuation.parenthesis.open-22.k }
     end: (\))
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -2750,7 +2740,7 @@ repository:
   argument-list:
     begin: \(
     beginCaptures:
-      '0': { name: punctuation.parenthesis.open.k }
+      '0': { name: punctuation.parenthesis.open-23.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -3032,7 +3022,7 @@ repository:
   lambda-parameter-list:
     begin: \(
     beginCaptures:
-      '0': { name: punctuation.parenthesis.open.k }
+      '0': { name: punctuation.parenthesis.open-24.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -3107,7 +3097,7 @@ repository:
   tuple-type:
     begin: \(
     beginCaptures:
-      '0': { name: punctuation.parenthesis.open.k }
+      '0': { name: punctuation.parenthesis.open-25.k }
     end: \)
     endCaptures:
       '0': { name: punctuation.parenthesis.close.k }
@@ -3365,7 +3355,7 @@ repository:
     patterns:
     - begin: \(
       beginCaptures:
-        '0': { name: punctuation.parenthesis.open.k }
+        '0': { name: punctuation.parenthesis.open-26.k }
       end: \)
       endCaptures:
         '0': { name: punctuation.parenthesis.close.k }
