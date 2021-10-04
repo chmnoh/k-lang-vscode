@@ -1,10 +1,10 @@
 {
     "name": "k-lang",
     "displayName": "K Lang",
-    "publisher":"chmn-oh",
+    "publisher": "chmn-oh",
     "repository": "https://github.com/chmnoh/k-lang-vscode",
     "description": "Syntax highlighting for K lang",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "engines": {
         "vscode": "^1.60.0"
     },
@@ -12,16 +12,26 @@
         "Programming Languages"
     ],
     "contributes": {
-        "languages": [{
-            "id": "klang",
-            "aliases": ["K", "klang"],
-            "extensions": [".k", ".kql"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "klang",
-            "scopeName": "source.k",
-            "path": "./syntaxes/klang.tmLanguage.json"
-        }]
+        "languages": [
+            {
+                "id": "klang",
+                "aliases": [
+                    "K",
+                    "klang"
+                ],
+                "extensions": [
+                    ".k",
+                    ".kql"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "klang",
+                "scopeName": "source.k",
+                "path": "./syntaxes/klang.tmLanguage.json"
+            }
+        ]
     }
 }
