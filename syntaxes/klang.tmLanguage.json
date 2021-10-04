@@ -2548,7 +2548,7 @@
           "name": "variable.other.readwrite.k"
         },
         "3": {
-          "name": "keyword.control.loop.in.for-in.k"
+          "name": "keyword.control.loop.for-in.k"
         }
       },
       "end": "(?<=\\})",
