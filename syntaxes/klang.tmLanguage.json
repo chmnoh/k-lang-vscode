@@ -2761,6 +2761,9 @@
       "end": "(?<=\\})",
       "patterns": [
         {
+          "include": "#statement"
+        },
+        {
           "begin": "\\(",
           "beginCaptures": {
             "0": {
@@ -2796,6 +2799,9 @@
         },
         {
           "include": "#comment"
+        },
+        {
+          "include": "#statement"
         },
         {
           "include": "#block"

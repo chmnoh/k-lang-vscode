@@ -1636,6 +1636,7 @@ repository:
         '1': { name: keyword.control.try.catch.k }
     end: (?<=\})
     patterns:
+    - include: '#statement'
     - begin: \(
       beginCaptures:
         '0': { name: punctuation.parenthesis.open-10.k }
@@ -1679,6 +1680,7 @@ repository:
           '6': { name: entity.name.variable.local-03.k }
     - include: '#when-clause'
     - include: '#comment'
+    - include: '#statement'
     - include: '#block'
 
   when-clause:
