@@ -1095,7 +1095,7 @@ repository:
     - include: '#statement'
 
   else-part:
-    begin: (?<!\.)\b(else)\b
+    begin: (?<!\.)\b(else|elif)\b
     beginCaptures:
       '1': { name: keyword.control.conditional.else.k }
     end: (?<=\})|(?=;)
