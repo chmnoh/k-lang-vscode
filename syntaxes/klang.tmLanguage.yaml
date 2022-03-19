@@ -88,6 +88,7 @@ repository:
     - include: '#do-statement'
     - include: '#for-in-statement'
     - include: '#for-to-statement'
+    - include: '#for-num-statement'
     - include: '#for-statement'
     - include: '#foreach-statement'
     - include: '#if-statement'
@@ -144,6 +145,12 @@ repository:
     - include: '#initializer-expression'
     - include: '#identifier'
     - include: '#qualified-identifier'
+
+  kql-clauses:
+    patterns:
+    - include: '#kql-transform-clause'
+    - include: '#kql-parallel-clause'
+    - include: '#kql-format-clause'
 
   extern-alias-directive:
     begin: \s*(extern)\b\s*(alias)\b\s*(@?[_[:alpha:]][_[:alnum:]]*)
@@ -1298,6 +1305,8 @@ repository:
       - include: '#kql-copy-volume-statement'
       - include: '#kql-alias-statement'
       - include: '#kql-printz-statement'
+      - include: '#kql-prints-statement'
+      - include: '#kql-command-statement'
 
 
   kql-select-statement:
@@ -1331,6 +1340,23 @@ repository:
       '1': { name: keyword.query.import.k }
       '3': { name: keyword.query.to.k }
     end: (?=;)
+    patterns:
+      - include: '#kql-clauses'
+
+  kql-transform-clause:
+    match: (?<!\.)\b(transform)\b
+    captures:
+      '1': { name: keyword.query.transform.k }
+
+  kql-parallel-clause:
+    match: (?<!\.)\b(parallel)\b
+    captures:
+      '1': { name: keyword.query.parallel.k }
+
+  kql-format-clause:
+    match: (?<!\.)\b(format)\b
+    captures:
+      '1': { name: keyword.query.format.k }
 
   kql-export-statement:
     begin: (?<!\.)\b(?i:(export\srecords\sfrom))\b\s+\b([_[:alpha:]][_[:alnum:]]*)\b
@@ -1480,6 +1506,22 @@ repository:
     patterns:
       - include: '#expression'
 
+  kql-prints-statement:
+    begin: (?<!\.)\b(prints)\b
+    beginCaptures:
+      '1': { name: keyword.query.prints.k }
+    end: (?=;)
+    patterns:
+      - include: '#expression'
+
+  kql-command-statement:
+    begin: (?<!\.)\b(echo|sleep)\b\s+
+    beginCaptures:
+      '1': { name: keyword.query.command.k }
+    end: (?=;)
+    patterns:
+      - include: '#expression'
+
   while-statement:
     begin: (?<!\.)\b(while)\b\s*(?=\()
     beginCaptures:
@@ -1504,9 +1546,8 @@ repository:
       '3': { name: keyword.control.loop.for-in.k }
     end: (?<=\})
     patterns:
-    - include: '#block'
-    - include: '#expression'
     - include: '#statement'
+    - include: '#block'
 
   for-to-statement:
     begin: (?<!\.)\b(for)\b\s*\b([_[:alpha:]][_[:alnum:]]*)\s*=\s*([[:digit:]]+)\b\s+\b(to)\b\s+
@@ -1516,8 +1557,15 @@ repository:
       '4': { name: keyword.control.loop.for-to.k }
     end: (?<=\})|(?=;)
     patterns:
+    - include: '#statement'
     - include: '#block'
-    - include: '#expression'
+
+  for-num-statement:
+    begin: (?<!\.)\b(for)\b\s*\b([[:digit:]]+)\b
+    beginCaptures:
+      '1': { name: keyword.control.loop.for-num.k }
+    end: (?<=\})|(?=;)
+    patterns:
     - include: '#statement'
 
   for-statement:
@@ -1618,6 +1666,7 @@ repository:
       '1': { name: keyword.control.try.k }
     end: (?<=\})
     patterns:
+    - include: '#statement'
     - include: '#comment'
     - include: '#block'
 

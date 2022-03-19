@@ -215,6 +215,9 @@
           "include": "#for-to-statement"
         },
         {
+          "include": "#for-num-statement"
+        },
+        {
           "include": "#for-statement"
         },
         {
@@ -376,6 +379,19 @@
         },
         {
           "include": "#qualified-identifier"
+        }
+      ]
+    },
+    "kql-clauses": {
+      "patterns": [
+        {
+          "include": "#kql-transform-clause"
+        },
+        {
+          "include": "#kql-parallel-clause"
+        },
+        {
+          "include": "#kql-format-clause"
         }
       ]
     },
@@ -2162,6 +2178,12 @@
         },
         {
           "include": "#kql-printz-statement"
+        },
+        {
+          "include": "#kql-prints-statement"
+        },
+        {
+          "include": "#kql-command-statement"
         }
       ]
     },
@@ -2227,7 +2249,41 @@
           "name": "keyword.query.to.k"
         }
       },
-      "end": "(?=;)"
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#kql-clauses"
+        }
+      ]
+    },
+    "kql-transform-clause": {
+      "match": "(?<!\\.)\\b(transform)\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.query.transform.k"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#expression"
+        }
+      ]
+    },
+    "kql-parallel-clause": {
+      "match": "(?<!\\.)\\b(parallel)\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.query.parallel.k"
+        }
+      }
+    },
+    "kql-format-clause": {
+      "match": "(?<!\\.)\\b(format)\\b",
+      "captures": {
+        "1": {
+          "name": "keyword.query.format.k"
+        }
+      }
     },
     "kql-export-statement": {
       "begin": "(?<!\\.)\\b(?i:(export\\srecords\\sfrom))\\b\\s+\\b([_[:alpha:]][_[:alnum:]]*)\\b",
@@ -2505,6 +2561,34 @@
         }
       ]
     },
+    "kql-prints-statement": {
+      "begin": "(?<!\\.)\\b(prints)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.prints.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#expression"
+        }
+      ]
+    },
+    "kql-command-statement": {
+      "begin": "(?<!\\.)\\b(echo|sleep)\\b\\s+",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.query.command.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#expression"
+        }
+      ]
+    },
     "while-statement": {
       "begin": "(?<!\\.)\\b(while)\\b\\s*(?=\\()",
       "beginCaptures": {
@@ -2554,13 +2638,10 @@
       "end": "(?<=\\})",
       "patterns": [
         {
-          "include": "#block"
-        },
-        {
-          "include": "#expression"
-        },
-        {
           "include": "#statement"
+        },
+        {
+          "include": "#block"
         }
       ]
     },
@@ -2580,11 +2661,22 @@
       "end": "(?<=\\})|(?=;)",
       "patterns": [
         {
-          "include": "#block"
+          "include": "#statement"
         },
         {
-          "include": "#expression"
-        },
+          "include": "#block"
+        }
+      ]
+    },
+    "for-num-statement": {
+      "begin": "(?<!\\.)\\b(for)\\b\\s*\\b([[:digit:]]+)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.loop.for-num.k"
+        }
+      },
+      "end": "(?<=\\})|(?=;)",
+      "patterns": [
         {
           "include": "#statement"
         }
@@ -2726,6 +2818,9 @@
       },
       "end": "(?<=\\})",
       "patterns": [
+        {
+          "include": "#statement"
+        },
         {
           "include": "#comment"
         },
