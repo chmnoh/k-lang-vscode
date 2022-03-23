@@ -11,6 +11,9 @@ Calling out known issues can help limit users opening duplicate issues against y
 ## Release Notes
 Users appreciate release notes as you update your extension.
 
+### 0.0.3
+for-num, prints, transform, parallel keywords, try-catch include statements, etc.
+
 ### 0.0.2
 * for-in, for-to statement bug fixed
 
