@@ -10,12 +10,14 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 Users appreciate release notes as you update your extension.
+### 0.0.5
+* dtor decl
+* reference/pointer return
 
 ### 0.0.4
 * use type-builtin as cast-expression
 * pointer type
 * import directive ending with semicolon
-
 
 ### 0.0.3
 for-num, prints, transform, parallel keywords, try-catch include statements, etc.
