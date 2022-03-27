@@ -10,6 +10,9 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 Users appreciate release notes as you update your extension.
+### 0.0.6
+* field decl pointer type bug fix
+
 ### 0.0.5
 * dtor decl
 * ref/pointer return

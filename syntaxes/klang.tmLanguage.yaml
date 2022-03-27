@@ -554,7 +554,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*\?|\**\s*)? # nullable suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -575,8 +575,8 @@ repository:
       # '3': ?<name_and_type_args> is a sub-expression. Its final value is not considered.
       # '4': ?<type_args> is a sub-expression. Its final value is not considered.
       # '5': ?<tuple> is a sub-expression. Its final value is not considered.
-      '6': { name: keyword.type.pointer.suffix.k }
-      '7': { name: entity.name.variable.field.k }
+      #'6': { name: keyword.type.pointer.suffix.k }
+      '6': { name: entity.name.variable.field.k }
     end: (?=;)
     patterns:
     - name: entity.name.variable.field.k
