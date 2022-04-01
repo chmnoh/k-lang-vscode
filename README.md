@@ -10,6 +10,10 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 Users appreciate release notes as you update your extension.
+### 0.0.7
+* double-pointer type arg
+* multi-lined single-quote string
+
 ### 0.0.6
 * field decl pointer type bug fix
 

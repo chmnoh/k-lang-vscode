@@ -4,7 +4,7 @@
     "publisher": "chmn-oh",
     "repository": "https://github.com/chmnoh/k-lang-vscode",
     "description": "Syntax highlighting for K lang",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "engines": {
         "vscode": "^1.60.0"
     },
