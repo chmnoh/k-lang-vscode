@@ -808,7 +808,7 @@ repository:
               (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
               (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
             )
-            (?:\s*\?\s*)? # nullable suffix?
+            (?:\s*\?|\**\s*)? # nullable suffix?
             (?:\s* # array suffix?
               \[
                 (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -2728,7 +2728,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*(\?|&|\*)\s*)? # nullable|reference|pointer suffix?
+          (?:\s*(\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -3158,7 +3158,7 @@ repository:
       '6': { name: entity.name.variable.tuple-element-04.k }
 
   type-builtin:
-    match: \b(void|bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\b(\**)
+    match: \b(bool|byte|char|decimal|double|float|int|int32|uint|uint32|int64|uint64|long|object|sbyte|short|string|uint|ulong|ushort|void|dynamic|file|list|set|tuple|dict|hash|matrix|socket)\b(\**)
     captures:
       '1': { name: keyword.type.builtin.k }
       '2': { name: keyword.type.pointer.k }
