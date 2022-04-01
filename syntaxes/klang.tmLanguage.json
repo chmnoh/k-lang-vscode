@@ -3635,7 +3635,7 @@
           "name": "punctuation.definition.char.begin.k"
         }
       },
-      "end": "(\\')|((?:[^\\\\\\n])$)",
+      "end": "(\\')",
       "endCaptures": {
         "1": {
           "name": "punctuation.definition.char.end.k"
