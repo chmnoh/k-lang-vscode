@@ -206,6 +206,9 @@
           "include": "#delete-statement"
         },
         {
+          "include": "#typedef-statement"
+        },
+        {
           "include": "#do-statement"
         },
         {
@@ -1464,6 +1467,9 @@
       "begin": "(?=@?[_[:alpha:]][_[:alnum:]]*\\s*\\()",
       "end": "(?<=\\})|(?=;)",
       "patterns": [
+        {
+          "include": "#statement"
+        },
         {
           "match": "(@?[_[:alpha:]][_[:alnum:]]*)\\b",
           "captures": {
@@ -3031,6 +3037,20 @@
         }
       }
     },
+    "typedef-statement": {
+      "begin": "\\b(typedef)\\b\\s+",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.other.typedef-01.k"
+        }
+      },
+      "end": "(?=;)",
+      "patterns": [
+        {
+          "include": "#local-declaration"
+        }
+      ]
+    },
     "local-declaration": {
       "patterns": [
         {
@@ -3953,7 +3973,7 @@
       }
     },
     "invocation-expression": {
-      "begin": "(?x)\n(?:(\\?)\\s*)?                                     # preceding null-conditional operator? #1\n(?:(\\.)\\s*)?                                     # preceding dot? #2\n(?:([_[:alpha:]][_[:alnum:]]*)\\:\\:)?             # namespace? #3\n(@?[_[:alpha:]][_[:alnum:]]*)\\s*                 # method name  #4\n(?<type_args>\\s*<([^<>]|\\g<type_args>)+>\\s*)?\\s* # type arguments #5\n(?=\\()                                           # open paren of argument list",
+      "begin": "(?x)\n(?:(\\?)\\s*)?                                     # preceding null-conditional operator? #1\n(?:(\\.)\\s*)?                                     # preceding dot? #2\n(?:([_[:alpha:]][_[:alnum:]]*)\\:\\:)?             # namespace? #3\n(@?[~_[:alpha:]][_[:alnum:]]*)\\s*                 # method name  #4\n(?<type_args>\\s*<([^<>]|\\g<type_args>)+>\\s*)?\\s* # type arguments #5\n(?=\\()                                           # open paren of argument list",
       "beginCaptures": {
         "1": {
           "name": "keyword.operator.null-conditional.k"

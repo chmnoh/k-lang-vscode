@@ -85,6 +85,7 @@ repository:
     - include: '#kql-statement'
     - include: '#while-statement'
     - include: '#delete-statement'
+    - include: '#typedef-statement'
     - include: '#do-statement'
     - include: '#for-in-statement'
     - include: '#for-to-statement'
@@ -856,6 +857,7 @@ repository:
     begin: (?=@?[_[:alpha:]][_[:alnum:]]*\s*\()
     end: (?<=\})|(?=;)
     patterns:
+    - include: '#statement'
     - match: (@?[_[:alpha:]][_[:alnum:]]*)\b
       captures:
         '1': { name: entity.name.function.ctor-decl.k }
@@ -1800,6 +1802,14 @@ repository:
       '1': { name: keyword.other.delete-01.k }
       '2': { name: entity.name.variable.local-04.k }
 
+  typedef-statement:
+    begin: '\b(typedef)\b\s+'
+    beginCaptures:
+      '1': { name: keyword.other.typedef-01.k }
+    end: (?=;)
+    patterns:
+    - include: '#local-declaration'
+
   local-declaration:
     patterns:
     - include: '#local-constant-declaration'
@@ -2488,7 +2498,7 @@ repository:
       (?:(\?)\s*)?                                     # preceding null-conditional operator? #1
       (?:(\.)\s*)?                                     # preceding dot? #2
       (?:([_[:alpha:]][_[:alnum:]]*)\:\:)?             # namespace? #3
-      (@?[_[:alpha:]][_[:alnum:]]*)\s*                 # method name  #4
+      (@?[~_[:alpha:]][_[:alnum:]]*)\s*                 # method name  #4
       (?<type_args>\s*<([^<>]|\g<type_args>)+>\s*)?\s* # type arguments #5
       (?=\()                                           # open paren of argument list
     beginCaptures:
