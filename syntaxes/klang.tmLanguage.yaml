@@ -3397,6 +3397,7 @@ repository:
 
   comment:
     patterns:
+    - include: 'text.html.kdoc'
     - name: comment.block.k
       begin: /\*
       beginCaptures:

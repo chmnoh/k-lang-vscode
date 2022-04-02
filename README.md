@@ -10,6 +10,9 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 Users appreciate release notes as you update your extension.
+### 0.0.9
+* kdoc support
+
 ### 0.0.8
 * unbraced single-statement ctor definition
 * typedef statement
