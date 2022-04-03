@@ -83,13 +83,13 @@
           "include": "#storage-modifier"
         },
         {
+          "include": "#enum-declaration"
+        },
+        {
           "include": "#class-declaration"
         },
         {
           "include": "#delegate-declaration"
-        },
-        {
-          "include": "#enum-declaration"
         },
         {
           "include": "#interface-declaration"
@@ -775,36 +775,19 @@
       "end": "(?<=\\})",
       "patterns": [
         {
-          "begin": "(?=enum)",
+          "begin": "(?x)\n\\b(enum)\\b\\s+\n(@?[_[:alpha:]][_[:alnum:]]*)?\\s*",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.other.enum.k"
+            },
+            "2": {
+              "name": "entity.name.type.enum.k"
+            }
+          },
           "end": "(?=\\{)",
           "patterns": [
             {
               "include": "#comment"
-            },
-            {
-              "match": "(enum)\\s+(@?[_[:alpha:]][_[:alnum:]]*)?",
-              "captures": {
-                "1": {
-                  "name": "keyword.other.enum.k"
-                },
-                "2": {
-                  "name": "entity.name.type.enum.k"
-                }
-              }
-            },
-            {
-              "begin": ":",
-              "beginCaptures": {
-                "0": {
-                  "name": "punctuation.separator.colon.k"
-                }
-              },
-              "end": "(?=\\{)",
-              "patterns": [
-                {
-                  "include": "#type"
-                }
-              ]
             }
           ]
         },
@@ -1445,6 +1428,9 @@
       "patterns": [
         {
           "include": "#comment"
+        },
+        {
+          "include": "#statement"
         },
         {
           "include": "#parenthesized-parameter-list"
@@ -2633,7 +2619,7 @@
           "name": "keyword.control.loop.for-in.k"
         }
       },
-      "end": "(?<=\\})",
+      "end": "(?<=\\})|(?=;)",
       "patterns": [
         {
           "include": "#statement"
@@ -4219,7 +4205,7 @@
       ]
     },
     "parameter": {
-      "match": "(?x)\n(?:(?:\\b(ref|params|out|in|this)\\b)\\s+)?\n(?<type_name>\n  (?:\n    (?:ref\\s+)?   # ref return\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*(\\?|&|\\**)\\s*)? # nullable|reference|pointer suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s+\n(\\g<identifier>)",
+      "match": "(?x)\n(?:(?:\\b(ref|params|out|in|this)\\b)\\s+)?\n(?<type_name>\n  (?:\n    (?:ref\\s+)?   # ref return\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*(?:\\?|&|\\**)\\s*)? # nullable|reference|pointer suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s+\n(\\g<identifier>)",
       "captures": {
         "1": {
           "name": "storage.modifier-07.k"

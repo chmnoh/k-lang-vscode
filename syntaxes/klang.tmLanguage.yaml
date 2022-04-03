@@ -39,9 +39,9 @@ repository:
     - include: '#preprocessor'
     - include: '#comment'
     - include: '#storage-modifier'
+    - include: '#enum-declaration'
     - include: '#class-declaration'
     - include: '#delegate-declaration'
-    - include: '#enum-declaration'
     - include: '#interface-declaration'
     - include: '#record-declaration'
     - include: '#struct-declaration'
@@ -366,20 +366,16 @@ repository:
     begin: (?=\benum\b)
     end: (?<=\})
     patterns:
-    - begin: (?=enum)
+    - begin: |-
+        (?x)
+        \b(enum)\b\s+
+        (@?[_[:alpha:]][_[:alnum:]]*)?\s*
+      beginCaptures:
+        '1': { name: keyword.other.enum.k }
+        '2': { name: entity.name.type.enum.k }
       end: (?=\{)
       patterns:
       - include: '#comment'
-      - match: (enum)\s+(@?[_[:alpha:]][_[:alnum:]]*)?
-        captures:
-          '1': { name: keyword.other.enum.k }
-          '2': { name: entity.name.type.enum.k }
-      - begin: ':'
-        beginCaptures:
-          '0': { name: punctuation.separator.colon.k }
-        end: (?=\{)
-        patterns:
-        - include: '#type'
     - begin: \{
       beginCaptures:
         '0': { name: punctuation.curlybrace.open-03.k }
@@ -847,6 +843,7 @@ repository:
     end: (?<=\})|(?=;)
     patterns:
     - include: '#comment'
+    - include: '#statement'
     - include: '#parenthesized-parameter-list'
     - include: '#rest-parameters-decl'
     - include: '#generic-constraints'
@@ -1547,7 +1544,7 @@ repository:
       '1': { name: keyword.control.loop.for-in.k }
       '2': { name: variable.other.readwrite.k }
       '3': { name: keyword.control.loop.for-in.k }
-    end: (?<=\})
+    end: (?<=\})|(?=;)
     patterns:
     - include: '#statement'
     - include: '#block'
@@ -2738,7 +2735,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*(\?|&|\**)\s*)? # nullable|reference|pointer suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
