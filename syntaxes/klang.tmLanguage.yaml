@@ -329,7 +329,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -551,7 +551,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?|\**\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -602,7 +602,7 @@ repository:
               (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
               (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
             )
-            (?:\s*\?\s*)? # nullable suffix?
+            (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
             (?:\s* # array suffix?
               \[
                 (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -655,7 +655,7 @@ repository:
               (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
               (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
             )
-            (?:\s*\?\s*)? # nullable suffix?
+            (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
             (?:\s* # array suffix?
               \[
                 (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -709,7 +709,7 @@ repository:
               (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
               (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
             )
-            (?:\s*\?\s*)? # nullable suffix?
+            (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
             (?:\s* # array suffix?
               \[
                 (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -805,7 +805,7 @@ repository:
               (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
               (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
             )
-            (?:\s*\?|\**\s*)? # nullable suffix?
+            (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
             (?:\s* # array suffix?
               \[
                 (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -906,7 +906,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -954,7 +954,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -1172,7 +1172,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -1208,7 +1208,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -1301,6 +1301,7 @@ repository:
       - include: '#kql-insert-statement'
       - include: '#kql-update-statement'
       - include: '#kql-import-statement'
+      - include: '#kql-indexto-statement'
       - include: '#kql-export-statement'
       - include: '#kql-copy-volume-statement'
       - include: '#kql-alias-statement'
@@ -1310,7 +1311,7 @@ repository:
 
 
   kql-select-statement:
-    begin: (?<!\.)\b(?i:(select))\b\s*(.+)\s*\b(?i:(from))\b\s+\b([^\s;]+)\b
+    begin: (?<!\.)\b(?i:(select|retrieve))\b\s*(.+)\s*\b(?i:(from))\b\s+\b([^\s;]+)\b
     beginCaptures:
       '1': { name: keyword.query.select.k }
       '2':
@@ -1335,13 +1336,25 @@ repository:
     end: (?=;)
 
   kql-import-statement:
-    begin: (?<!\.)\b(?i:(import\sfile|import\sfiles))\b\s*(.+)\s*\b(?i:(to))\b\s+\b([_[:alpha:]][_[:alnum:]]*)\b
+    begin: (?<!\.)(?imx:\b(import\s+file|import\s+files)\b)
     beginCaptures:
       '1': { name: keyword.query.import.k }
-      '3': { name: keyword.query.to.k }
+    end: (?=;)
+    patterns:
+      - include: '#kql-command-keyword'
+      - include: '#kql-clauses'
+      - include: '#expression'
+
+  kql-indexto-statement:
+    begin: (?<!\.)\b(?i:((view|build)\sindex\sto))\b\s+\b([_[:alpha:]][_\.[:alnum:]]*)\b
+    beginCaptures:
+      '1': { name: keyword.query.indexto.k }
     end: (?=;)
     patterns:
       - include: '#kql-clauses'
+      - include: '#string-literal'
+      - include: '#string-3-dquote-literal'
+      - include: '#kql-command-keyword'
 
   kql-transform-clause:
     match: (?<!\.)\b(transform)\b
@@ -1377,6 +1390,8 @@ repository:
     end: (?=;)
     patterns:
       - include: '#kql-set-clause'
+      - include: '#kql-command-keyword'
+      - include: '#expression'
 
   kql-set-clause:
     begin: |-
@@ -1413,20 +1428,36 @@ repository:
       - include: '#where-clause'
 
   kql-use-volume-statement:
-    begin: (?<!\.)\b(?i:(use))\b\s*(?i:(volume))\s*\b([_[:alpha:]][_[:alnum:]]*)\b\s*
+    begin: (?<!\.)\b(?i:(use))\b\s*(?i:(volume))\s*\b([_[:alpha:]][_[:alnum:]]*)?\b\s*
     beginCaptures:
       '1': { name: keyword.query.use.k }
       '2': { name: keyword.query.volume.k }
       '3': { name: entity.name.variable.k }
     end: (?=;)
+    patterns:
+    - include: '#expression'
 
   kql-create-statement:
-    begin: (?<!\.)\b(?i:(create|drop|rename|alter|truncate))\b\s*(?i:(volume|table|snapshot|index|gateway))\s*\b([_[:alpha:]][_[:alnum:]]*)\b\s*
+    begin: (?<!\.)\b(?i:(create|drop|rename|alter|truncate))\b\s*(?i:(volume|table|snapshot|index|gateway))\s*\b([_[:alpha:]][_[:alnum:]]*)?\b\s*
     beginCaptures:
       '1': { name: keyword.query.create_drop.k }
       '2': { name: keyword.query.entity.k }
       '3': { name: entity.name.variable.k }
     end: (?=;)
+    endCaptures:
+      '1': { name: punctuation.semicolon.close.creat-stmt.k }
+    patterns:
+    - begin: (\()
+      beginCaptures:
+        '1': {name: punctuation.parenthesis.open.create-tab.k }
+      end: (\)(?=;))
+      endCaptures:
+        '1': {name: punctuation.parenthesis.close.create-tab.k }
+      patterns:
+      - include: '#kql-type'
+      - include: '#kql-attribute'
+    - include: '#kql-command-keyword'
+    - include: '#expression'
 
   kql-show-statement:
     begin: (?<!\.)\b(?i:(show))\b\s*(?i:(volumes|tables|schedules|conf|privileges))
@@ -1515,12 +1546,17 @@ repository:
       - include: '#expression'
 
   kql-command-statement:
-    begin: (?<!\.)\b(echo|sleep)\b\s+
+    begin: (?<!\.)\b(echo|sleep|run|exec)\b\s+
     beginCaptures:
       '1': { name: keyword.query.command.k }
     end: (?=;)
     patterns:
       - include: '#expression'
+  
+  kql-command-keyword:
+    match: '\b(?i:(values|file system|format|through|operation|field (starts|ends) with|field value takes|on|to))\b'
+    captures:
+      '1': { name: keyword.other.kql-command.k }
 
   while-statement:
     begin: (?<!\.)\b(while)\b\s*(?=\()
@@ -1615,7 +1651,7 @@ repository:
                   (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
                   (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
                 )
-                (?:\s*\?\s*)? # nullable suffix?
+                (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
                 (?:\s* # array suffix?
                   \[
                     (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -1706,7 +1742,7 @@ repository:
                 (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
                 (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
               )
-              (?:\s*\?\s*)? # nullable suffix?
+              (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
               (?:\s* # array suffix?
                 \[
                   (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -1832,7 +1868,7 @@ repository:
               (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
               (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
             )
-            (?:\s*(?:\?|\*)\s*)? # nullable/pointer suffix?
+            (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
             (?:\s* # array suffix?
               \[
                 (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -1883,7 +1919,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -1996,7 +2032,7 @@ repository:
               (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
               (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
             )
-            (?:\s*\?\s*)? # nullable suffix?
+            (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
             (?:\s* # array suffix?
               \[
                 (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -2037,7 +2073,7 @@ repository:
               (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
               (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
             )
-            (?:\s*\?\s*)? # nullable suffix?
+            (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
                       (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -2434,7 +2470,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -2466,7 +2502,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -2589,7 +2625,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -2625,7 +2661,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -2658,7 +2694,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -2813,7 +2849,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -2892,7 +2928,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -3068,7 +3104,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -3140,7 +3176,7 @@ repository:
             (?:\s*\.\s*\g<name_and_type_args>)* | # Are there any more names being dotted into?
             (?<tuple>\s*\((?:[^\(\)]|\g<tuple>)+\))
           )
-          (?:\s*\?\s*)? # nullable suffix?
+          (?:\s*(?:\?|&|\**)\s*)? # nullable|reference|pointer suffix?
           (?:\s* # array suffix?
             \[
               (?:\s*,\s*)* # commata for multi-dimensional arrays
@@ -3169,6 +3205,16 @@ repository:
     captures:
       '1': { name: keyword.type.builtin.k }
       '2': { name: keyword.type.pointer.k }
+
+  kql-type:
+    match: \b(?i:(char|int1|int8|int16|int32|int32|string|text|date|time|vector|constraint|tags|reference type|column))\b
+    captures:
+      '1': { name: keyword.other.kql-type.k }
+
+  kql-attribute:
+    match: \b(?i:(list|para|verbatim|unique|primary|null|signed|unsigned|ann|cos|btree|internal|local))\b
+    captures:
+      '1': { name: keyword.other.kql-attr.k }
 
   type-name:
     patterns:

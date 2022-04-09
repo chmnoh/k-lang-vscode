@@ -1,6 +1,6 @@
 # k-lang README
 * The K Language syntax highlighting support.
-* C# syntax highlighting based.
+* C# syntax yaml based.
 ## Requirements
 
 ## Extension Settings
@@ -10,6 +10,10 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 Users appreciate release notes as you update your extension.
+### 0.1.1
+* kql-statement highlighting improvements
+* const modifier 
+
 ### 0.1.0
 * enum-decl
 * for-in single-stmt bug fix
