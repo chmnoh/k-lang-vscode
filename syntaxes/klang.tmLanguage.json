@@ -1019,13 +1019,13 @@
       "begin": "\\<",
       "beginCaptures": {
         "0": {
-          "name": "punctuation.definition.typeparameters.begin.k"
+          "name": "punctuation.definition.typeparameters.begin-01.k"
         }
       },
       "end": "\\>",
       "endCaptures": {
         "0": {
-          "name": "punctuation.definition.typeparameters.end.k"
+          "name": "punctuation.definition.typeparameters.end-01.k"
         }
       },
       "patterns": [
@@ -1430,10 +1430,10 @@
           "include": "#comment"
         },
         {
-          "include": "#statement"
+          "include": "#parenthesized-parameter-list"
         },
         {
-          "include": "#parenthesized-parameter-list"
+          "include": "#statement"
         },
         {
           "include": "#rest-parameters-decl"
@@ -3821,7 +3821,7 @@
       "end": "\\)",
       "endCaptures": {
         "0": {
-          "name": "punctuation.parenthesis.close.k"
+          "name": "punctuation.parenthesis.close-19.k"
         }
       },
       "patterns": [
@@ -3958,7 +3958,7 @@
       "end": "\\)",
       "endCaptures": {
         "0": {
-          "name": "punctuation.parenthesis.close.k"
+          "name": "punctuation.parenthesis.close-20.k"
         }
       },
       "patterns": [
@@ -4288,7 +4288,7 @@
       ]
     },
     "parameter": {
-      "match": "(?x)\n(?:(?:\\b(ref|params|out|in|this)\\b)\\s+)?\n(?<type_name>\n  (?:\n    (?:ref\\s+)?   # ref return\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*(?:\\?|&|\\**)\\s*)? # nullable|reference|pointer suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s+\n(\\g<identifier>)",
+      "match": "(?x)\n(?:(?:\\b(ref|params|out|in|this|const)\\b)\\s+)?\n(?<type_name>\n  (?:\n    (?:ref\\s+)?   # ref return\n    (?:\n      (?:(?<identifier>@?[_[:alpha:]][_[:alnum:]]*)\\s*\\:\\:\\s*)? # alias-qualification\n      (?<name_and_type_args> # identifier + type arguments (if any)\n        \\g<identifier>\\s*\n        (?<type_args>\\s*<(?:[^<>]|\\g<type_args>)+>\\s*)?\n      )\n      (?:\\s*\\.\\s*\\g<name_and_type_args>)* | # Are there any more names being dotted into?\n      (?<tuple>\\s*\\((?:[^\\(\\)]|\\g<tuple>)+\\))\n    )\n    (?:\\s*(?:\\?|&|\\**)\\s*)? # nullable|reference|pointer suffix?\n    (?:\\s* # array suffix?\n      \\[\n        (?:\\s*,\\s*)* # commata for multi-dimensional arrays\n      \\]\n      \\s*\n      (?:\\?)? # arrays can be nullable reference types\n      \\s*\n    )*\n  )\n)\\s+\n(\\g<identifier>)",
       "captures": {
         "1": {
           "name": "storage.modifier-07.k"
@@ -4927,13 +4927,19 @@
       "begin": "<",
       "beginCaptures": {
         "0": {
-          "name": "punctuation.definition.typeparameters.begin.k"
+          "name": "punctuation.definition.typeparameters.begin-02.k"
         }
       },
-      "end": ">",
+      "end": "(>)(?:(&)|(\\**))?",
       "endCaptures": {
-        "0": {
-          "name": "punctuation.definition.typeparameters.end.k"
+        "1": {
+          "name": "punctuation.definition.typeparameters.end-02.k"
+        },
+        "2": {
+          "name": "keyword.type.reference.k"
+        },
+        "3": {
+          "name": "keyword.type.pointer.k"
         }
       },
       "patterns": [
@@ -5024,6 +5030,9 @@
           "include": "#preprocessor-define-or-undef"
         },
         {
+          "include": "#preprocessor-if0-or-elif0"
+        },
+        {
           "include": "#preprocessor-if-or-elif"
         },
         {
@@ -5071,6 +5080,37 @@
           "name": "entity.name.variable.preprocessor.symbol.k"
         }
       }
+    },
+    "preprocessor-if0-or-elif0": {
+      "patterns": [
+        {
+          "include": "text.html.kdoc"
+        },
+        {
+          "name": "comment.block.if-0.k",
+          "begin": "\\b(?:(if\\s+0)|(elif\\s+0))\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.preprocessor.if0.k"
+            },
+            "2": {
+              "name": "keyword.preprocessor.elif0.k"
+            }
+          },
+          "end": "\\b(?:(else)|(endif)|(elif))\\b",
+          "endCaptures": {
+            "1": {
+              "name": "keyword.preprocessor.else0.k"
+            },
+            "2": {
+              "name": "keyword.preprocessor.endif0.k"
+            },
+            "3": {
+              "name": "keyword.preprocessor.elif0.k"
+            }
+          }
+        }
+      ]
     },
     "preprocessor-if-or-elif": {
       "begin": "\\b(?:(if)|(elif))\\b",

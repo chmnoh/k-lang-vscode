@@ -484,10 +484,10 @@ repository:
   type-parameter-list:
     begin: \<
     beginCaptures:
-      '0': { name: punctuation.definition.typeparameters.begin.k }
+      '0': { name: punctuation.definition.typeparameters.begin-01.k }
     end: \>
     endCaptures:
-      '0': { name: punctuation.definition.typeparameters.end.k }
+      '0': { name: punctuation.definition.typeparameters.end-01.k }
     patterns:
     - match: \b(in|out)\b
       captures:
@@ -843,8 +843,8 @@ repository:
     end: (?<=\})|(?=;)
     patterns:
     - include: '#comment'
-    - include: '#statement'
     - include: '#parenthesized-parameter-list'
+    - include: '#statement'
     - include: '#rest-parameters-decl'
     - include: '#generic-constraints'
     - include: '#expression-body'
@@ -2355,7 +2355,7 @@ repository:
       '1': { name: punctuation.parenthesis.open-19.k }
     end: \)
     endCaptures:
-      '0': { name: punctuation.parenthesis.close.k }
+      '0': { name: punctuation.parenthesis.close-19.k }
     patterns:
     - include: '#comment'
     - include: '#tuple-literal-element'
@@ -2434,7 +2434,7 @@ repository:
       '0': { name: punctuation.parenthesis.open-20.k }
     end: \)
     endCaptures:
-      '0': { name: punctuation.parenthesis.close.k }
+      '0': { name: punctuation.parenthesis.close-20.k }
     patterns:
     - include: '#expression'
 
@@ -2758,7 +2758,7 @@ repository:
   parameter:
     match: |-
       (?x)
-      (?:(?:\b(ref|params|out|in|this)\b)\s+)?
+      (?:(?:\b(ref|params|out|in|this|const)\b)\s+)?
       (?<type_name>
         (?:
           (?:ref\s+)?   # ref return
@@ -3236,10 +3236,12 @@ repository:
   type-arguments:
     begin: '<'
     beginCaptures:
-      '0': { name: punctuation.definition.typeparameters.begin.k }
-    end: '>'
+      '0': { name: punctuation.definition.typeparameters.begin-02.k }
+    end: '(>)(?:(&)|(\**))?'
     endCaptures:
-      '0': { name: punctuation.definition.typeparameters.end.k }
+      '1': { name: punctuation.definition.typeparameters.end-02.k }
+      '2': { name: keyword.type.reference.k }
+      '3': { name: keyword.type.pointer.k }
     patterns:
     - include: '#comment'
     - include: '#type'
@@ -3295,6 +3297,7 @@ repository:
     patterns:
     - include: '#comment'
     - include: '#preprocessor-define-or-undef'
+    - include: '#preprocessor-if0-or-elif0'
     - include: '#preprocessor-if-or-elif'
     - include: '#preprocessor-else-or-endif'
     - include: '#preprocessor-warning-or-error'
@@ -3313,6 +3316,20 @@ repository:
       '1': { name: keyword.preprocessor.define.k }
       '2': { name: keyword.preprocessor.undef.k }
       '3': { name: entity.name.variable.preprocessor.symbol.k }
+
+  preprocessor-if0-or-elif0:
+    patterns:
+    - include: 'text.html.kdoc'
+    - name: comment.block.if-0.k
+      begin: \b(?:(if\s+0)|(elif\s+0))\b
+      beginCaptures:
+        '1': { name: keyword.preprocessor.if0.k }
+        '2': { name: keyword.preprocessor.elif0.k }
+      end: \b(?:(else)|(endif)|(elif))\b
+      endCaptures:
+        '1': { name: keyword.preprocessor.else0.k }
+        '2': { name: keyword.preprocessor.endif0.k }
+        '3': { name: keyword.preprocessor.elif0.k }
 
   preprocessor-if-or-elif:
     begin: \b(?:(if)|(elif))\b
