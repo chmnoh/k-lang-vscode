@@ -102,6 +102,7 @@ repository:
     - include: '#yield-statement'
     - include: '#await-statement'
     - include: '#try-statement'
+    - include: '#parallel-statement'
     - include: '#checked-unchecked-statement'
     - include: '#lock-statement'
     - include: '#using-statement'
@@ -1600,6 +1601,7 @@ repository:
     begin: (?<!\.)\b(for)\b\s*\b([[:digit:]]+)\b
     beginCaptures:
       '1': { name: keyword.control.loop.for-num.k }
+      '2': { name: constant.numeric.for-num.loop-count.k }
     end: (?<=\})|(?=;)
     patterns:
     - include: '#statement'
@@ -1700,6 +1702,19 @@ repository:
     begin: (?<!\.)\b(try)\b
     beginCaptures:
       '1': { name: keyword.control.try.k }
+    end: (?<=\})
+    patterns:
+    - include: '#statement'
+    - include: '#comment'
+    - include: '#block'
+
+  parallel-statement:
+    begin: (?<!\.)\b(parallel)\b\s*((\()([[:digit:]]+)(\)))?
+    beginCaptures:
+      '1': { name: keyword.control.parallel.k }
+      '3': { name: punctuation.parenthesis.open.parallel.thread-count.k }
+      '4': { name: constant.numeric.parallel.thread-count.k }
+      '5': { name: punctuation.parenthesis.close.parallel.thread-count.k }
     end: (?<=\})
     patterns:
     - include: '#statement'
@@ -2884,6 +2899,7 @@ repository:
     - include: '#where-clause'
     - include: '#join-clause'
     - include: '#orderby-clause'
+    - include: '#distinctby-clause'
     - include: '#select-clause'
     - include: '#group-clause'
 
@@ -2986,6 +3002,16 @@ repository:
     end: (?=;|\))
     patterns:
     - include: '#ordering-direction'
+    - include: '#query-body'
+    - include: '#expression'
+    - include: '#punctuation-comma'
+
+  distinctby-clause:
+    begin: \b(distinct\s+by)\b\s*
+    beginCaptures:
+      '1': { name: keyword.query.distinctby.k }
+    end: (?=;|\))
+    patterns:
     - include: '#query-body'
     - include: '#expression'
     - include: '#punctuation-comma'

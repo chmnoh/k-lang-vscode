@@ -10,6 +10,10 @@ Calling out known issues can help limit users opening duplicate issues against y
 
 ## Release Notes
 Users appreciate release notes as you update your extension.
+### 0.1.3
+* parallel-statement
+* kql-distinct-by clause
+
 ### 0.1.2
 * #if-0 ~ #endif as comment block
 * function parameters error fixed
